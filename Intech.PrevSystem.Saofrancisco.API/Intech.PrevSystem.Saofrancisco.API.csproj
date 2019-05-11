@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.7" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.10" />
     <PackageReference Include="Intech.Lib.Dapper" Version="1.0.1" />
     <PackageReference Include="Intech.Lib.Web" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

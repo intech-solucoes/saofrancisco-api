@@ -1,5 +1,7 @@
 ﻿#region Usings
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
@@ -40,6 +42,48 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     var saldo = new FichaFinanceiraProxy().BuscarSaldoPorFundacaoEmpresaPlanoInscricaoFundo(CdFundacao, CdEmpresa, cdPlano, Inscricao, "6");
                     return Json(saldo);
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("ultimaExibicaoPorPlano/{cdPlano}")]
+        [Authorize("Bearer")]
+        public IActionResult GetUltimaExibicaoPorPlano(string cdPlano)
+        {
+            try
+            {
+                var contribs = new FichaFinanceiraProxy().BuscarUltimaPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
+
+                var retorno = new List<dynamic>();
+
+                retorno.Add(new
+                {
+                    Descricao = "Contribuição Participante",
+                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "31").CONTRIB_PARTICIPANTE
+                });
+
+                retorno.Add(new
+                {
+                    Descricao = "Taxa Administrativa",
+                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "32").CONTRIB_PARTICIPANTE * -1M
+                });
+
+                retorno.Add(new
+                {
+                    Descricao = "Contribuição Patrocinadora",
+                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA
+                });
+
+                retorno.Add(new
+                {
+                    Descricao = "Total",
+                    Valor = retorno.Sum(x => x.Valor)
+                });
+
+                return Json(retorno);
             }
             catch (Exception ex)
             {
