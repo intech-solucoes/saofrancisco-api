@@ -13,38 +13,38 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     [Route(RotasApi.Plano)]
     public class PlanoController : BasePlanoController
     {
-        [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]
-        [Authorize("Bearer")]
-        public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim)
-        {
-            try
-            {
-                var funcionario = new FuncionarioProxy().BuscarPorCodEntid(CodEntid);
+        //[HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]
+        //[Authorize("Bearer")]
+        //public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim)
+        //{
+        //    try
+        //    {
+        //        var funcionario = new FuncionarioProxy().BuscarPorCodEntid(CodEntid);
 
-                var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
-                var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+        //        var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+        //        var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
 
-                var relatorio = new Relatorios.RelatorioExtratoContribuicao();
-                relatorio.GerarRelatorio(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, cdPlano, Matricula, dataInicio, dataFim);
+        //        var relatorio = new Relatorios.RelatorioExtratoContribuicao();
+        //        relatorio.GerarRelatorio(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, cdPlano, Matricula, dataInicio, dataFim);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    relatorio.ExportToPdf(ms);
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+        //            relatorio.ExportToPdf(ms);
 
-                    // Clona stream pois o método ExportToPdf fecha a atual
-                    var pdfStream = new MemoryStream();
-                    pdfStream.Write(ms.ToArray(), 0, ms.ToArray().Length);
-                    pdfStream.Position = 0;
+        //            // Clona stream pois o método ExportToPdf fecha a atual
+        //            var pdfStream = new MemoryStream();
+        //            pdfStream.Write(ms.ToArray(), 0, ms.ToArray().Length);
+        //            pdfStream.Position = 0;
 
-                    var filename = $"ExtratoContribuicoes_{Guid.NewGuid().ToString()}.pdf";
+        //            var filename = $"ExtratoContribuicoes_{Guid.NewGuid().ToString()}.pdf";
 
-                    return File(pdfStream, "application/pdf", filename);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //            return File(pdfStream, "application/pdf", filename);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

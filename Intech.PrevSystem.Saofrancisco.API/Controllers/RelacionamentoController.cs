@@ -27,7 +27,7 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
                 EnvioEmail.Enviar(emailConfig, emailConfig.EmailRemetente, $"São francisco Mobile - {relacionamentoEntidade.Assunto}", $"Mensagem de <b>{relacionamentoEntidade.Email}</b>:<br/><br/>{relacionamentoEntidade.Mensagem}");
                 return Ok();
             }
-            catch(Exception ex)
+            catch
             {
                 return BadRequest("Ocorreu um erro ao enviar socilitação.");
             }

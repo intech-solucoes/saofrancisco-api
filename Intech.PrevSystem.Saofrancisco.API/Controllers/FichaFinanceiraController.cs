@@ -56,34 +56,24 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             try
             {
                 var contribs = new FichaFinanceiraProxy().BuscarUltimaPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
+                var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, "31");
 
-                var retorno = new List<dynamic>();
-
-                retorno.Add(new
+                var listaContribs = new List<Tuple<string, decimal>>
                 {
-                    Descricao = "Contribuição Participante",
-                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "31").CONTRIB_PARTICIPANTE
-                });
+                    new Tuple<string, decimal>("Contribuição Participante", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "31").CONTRIB_PARTICIPANTE.Value),
+                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA.Value),
+                    new Tuple<string, decimal>("Taxa Administrativa", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "32").CONTRIB_PARTICIPANTE.Value * -1M)
+                };
 
-                retorno.Add(new
+                listaContribs.Add(new Tuple<string, decimal>("Total", listaContribs.Sum(x => x.Item2)));
+
+                return Json(new
                 {
-                    Descricao = "Taxa Administrativa",
-                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "32").CONTRIB_PARTICIPANTE * -1M
+                    DataReferencia = contribs.First().DT_MOVIMENTO,
+                    contribs.First().SRC,
+                    Percentual = contribsIndividuais.VL_PERC_PAR,
+                    Itens = listaContribs
                 });
-
-                retorno.Add(new
-                {
-                    Descricao = "Contribuição Patrocinadora",
-                    Valor = contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA
-                });
-
-                retorno.Add(new
-                {
-                    Descricao = "Total",
-                    Valor = retorno.Sum(x => x.Valor)
-                });
-
-                return Json(retorno);
             }
             catch (Exception ex)
             {
