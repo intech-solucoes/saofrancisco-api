@@ -24,7 +24,7 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
             try
             {
                 var emailConfig = Config.GetSection("Email").Get<ConfigEmail>();
-                EnvioEmail.Enviar(emailConfig, emailConfig.EmailRemetente, $"São francisco Mobile - {relacionamentoEntidade.Assunto}", $"Mensagem de <b>{relacionamentoEntidade.Email}</b>:<br/><br/>{relacionamentoEntidade.Mensagem}");
+                EnvioEmail.EnviarMailKit(emailConfig, emailConfig.EmailRelacionamento, $"São Francisco - {relacionamentoEntidade.Assunto}", $"Mensagem de <b>{relacionamentoEntidade.Email}</b>:<br/><br/>{relacionamentoEntidade.Mensagem}");
                 return Ok();
             }
             catch

@@ -225,5 +225,42 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpGet("menu")]
+        //[Authorize("Bearer")]
+        //public IActionResult Menu()
+        //{
+        //    try
+        //    {
+        //        var dadosPlano = new PlanoVinculadoProxy().BuscarPorFundacaoMatricula(CdFundacao, Matricula);
+
+        //        var menuAtivos = new List<string> {
+        //            "home",
+        //            "dados",
+        //            "plano",
+        //            "emprestimos",
+        //            "trocarSenha",
+        //            "relacionamento"
+        //        };
+
+        //        var menuAssistidos = new List<string> {
+        //            "home",
+        //            "dados",
+        //            "beneficios",
+        //            "emprestimos",
+        //            "trocarSenha",
+        //            "relacionamento"
+        //        };
+
+        //        if (dadosPlano.IsAtivo())
+        //            return Json(menuAtivos);
+        //        else
+        //            return Json(menuAssistidos);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

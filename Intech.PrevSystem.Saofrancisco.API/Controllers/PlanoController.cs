@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
-using System.IO;
 #endregion
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
@@ -13,38 +12,37 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     [Route(RotasApi.Plano)]
     public class PlanoController : BasePlanoController
     {
-        //[HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]
-        //[Authorize("Bearer")]
-        //public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim)
-        //{
-        //    try
-        //    {
-        //        var funcionario = new FuncionarioProxy().BuscarPorCodEntid(CodEntid);
+        [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]
+        [Authorize("Bearer")]
+        public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim)
+        {
+            try
+            {
+                var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+                var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
 
-        //        var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
-        //        var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+                string AnoRefMesRefInicio = dataInicio.ToString("yyyyMM");
+                string AnoRefMesRefFim = dataFim.ToString("yyyyMM");
 
-        //        var relatorio = new Relatorios.RelatorioExtratoContribuicao();
-        //        relatorio.GerarRelatorio(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, cdPlano, Matricula, dataInicio, dataFim);
+                var retorno = new
+                {
+                    Funcionario = new FuncionarioProxy().BuscarPorCodEntid(CodEntid),
+                    Fundacao = new FundacaoProxy().BuscarPorCodigo(CdFundacao),
+                    Empresa = new EmpresaProxy().BuscarPorCodigo(CdEmpresa),
+                    Plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano),
+                    Ficha = new FichaFechamentoProxy()
+                        .BuscarRelatorioPorFundacaoEmpresaPlanoInscricaoReferencia(CdFundacao, CdEmpresa, cdPlano, Inscricao, AnoRefMesRefInicio, AnoRefMesRefFim)
+                };
 
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            relatorio.ExportToPdf(ms);
+                retorno.Fundacao.CEP_ENTID = retorno.Fundacao.CEP_ENTID.AplicarMascara(Mascaras.CEP);
+                retorno.Fundacao.CPF_CGC = retorno.Fundacao.CPF_CGC.AplicarMascara(Mascaras.CNPJ);
 
-        //            // Clona stream pois o método ExportToPdf fecha a atual
-        //            var pdfStream = new MemoryStream();
-        //            pdfStream.Write(ms.ToArray(), 0, ms.ToArray().Length);
-        //            pdfStream.Position = 0;
-
-        //            var filename = $"ExtratoContribuicoes_{Guid.NewGuid().ToString()}.pdf";
-
-        //            return File(pdfStream, "application/pdf", filename);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return Json(retorno);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -91,6 +91,12 @@ namespace Intech.PrevSystem.Saofrancisco.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "imagens")),
+                RequestPath = "/imagens"
+            });
+
             app.UseCors(cors =>
             {
                 cors.AllowAnyHeader();

@@ -1,45 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <Version>0.0.1</Version>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Relatorios\**" />
+      <Content Remove="Relatorios\**" />
+      <EmbeddedResource Remove="Relatorios\**" />
+      <None Remove="Relatorios\**" />
+    </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.0.1</Version>
-  </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Intech.Lib.Dapper" Version="1.0.1" />
+        <PackageReference Include="Intech.Lib.Web" Version="1.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Relatorios\**" />
-    <Compile Remove="wwwroot\**" />
-    <Content Remove="Relatorios\**" />
-    <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="Relatorios\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="Relatorios\**" />
-    <None Remove="wwwroot\**" />
-  </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\lab\OpenHtmlToPdf\OpenHtmlToPdf.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Intech.Lib.Dapper" Version="1.0.1" />
-    <PackageReference Include="Intech.Lib.Web" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-  </ItemGroup>
+    <ItemGroup>
+      <None Update="imagens\logo.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Drawing">
-      <HintPath>System.Drawing</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <Import Project="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems" Label="Shared" Condition="Exists('..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems')" />
-  <Import Project="..\..\..\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems" Label="Shared" Condition="Exists('..\..\..\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems')" />
-  <Import Project="..\..\..\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems" Label="Shared" Condition="Exists('..\..\..\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems')" />
-  <Import Project="..\..\..\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" Condition="Exists('..\..\..\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems')" />
-  <Import Project="..\..\..\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" Condition="Exists('..\..\..\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems')" />
-  <Import Project="..\..\..\..\lib\dotnet-lib\Intech.Lib.Web\Intech.Lib.Web.projitems" Label="Shared" Condition="Exists('..\..\..\..\lib\dotnet-lib\Intech.Lib.Web\Intech.Lib.Web.projitems')" />
-  <Import Project="..\..\..\..\lib\dotnet-lib\Intech.Lib.Util\Intech.Lib.Util.projitems" Label="Shared" Condition="Exists('..\..\..\..\lib\dotnet-lib\Intech.Lib.Util\Intech.Lib.Util.projitems')" />
-  <Import Project="..\..\..\..\lib\dotnet-lib\Intech.Lib.Data\Intech.Lib.Data.projitems" Label="Shared" Condition="Exists('..\..\..\..\lib\dotnet-lib\Intech.Lib.Data\Intech.Lib.Data.projitems')" />
-  <Import Project="..\..\..\..\lib\dotnet-lib\Intech.Lib.Dapper\Intech.Lib.Dapper.projitems" Label="Shared" Condition="Exists('..\..\..\..\lib\dotnet-lib\Intech.Lib.Dapper\Intech.Lib.Dapper.projitems')" />
-  <Import Project="..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" />
-  <Import Project="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems" Label="Shared" />
-  <Import Project="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems" Label="Shared" />
-  <Import Project="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" />
+    <Import Project="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems" Label="Shared" Condition="Exists('..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems')" />
+    <Import Project="..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" />
+    <Import Project="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems" Label="Shared" />
+    <Import Project="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems" Label="Shared" />
+    <Import Project="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" />
 </Project>
