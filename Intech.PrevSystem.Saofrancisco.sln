@@ -12,11 +12,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.API", "..
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.Dados", "..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.shproj", "{549415E4-D6A6-42B0-92B2-B30F6B2700F3}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.Entidades", "..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.shproj", "{CE1AB52D-FDA8-41F8-975B-0D7BA605BD2E}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.Negocio", "..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.shproj", "{A88CF162-E0EC-4213-9964-543ECA2BEE87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenHtmlToPdf", "..\..\lab\OpenHtmlToPdf\OpenHtmlToPdf.csproj", "{023DF833-B252-48B3-B6AF-DBBB13E39B13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Entidades", "..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj", "{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -24,7 +24,6 @@ Global
 		Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems*{4bea1547-e04c-4218-aab8-da18ede1d705}*SharedItemsImports = 13
 		..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems*{549415e4-d6a6-42b0-92b2-b30f6b2700f3}*SharedItemsImports = 13
 		..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems*{a88cf162-e0ec-4213-9964-543eca2bee87}*SharedItemsImports = 13
-		..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems*{ce1ab52d-fda8-41f8-975b-0d7ba605bd2e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +58,18 @@ Global
 		{023DF833-B252-48B3-B6AF-DBBB13E39B13}.Release|x64.Build.0 = Release|x64
 		{023DF833-B252-48B3-B6AF-DBBB13E39B13}.Release|x86.ActiveCfg = Release|x86
 		{023DF833-B252-48B3-B6AF-DBBB13E39B13}.Release|x86.Build.0 = Release|x86
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|x64.Build.0 = Release|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,8 +77,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{11D947CE-05E2-41DB-8687-640404E96EF0} = {29C18A67-2651-4148-AC1F-4FBB051F49C3}
 		{549415E4-D6A6-42B0-92B2-B30F6B2700F3} = {29C18A67-2651-4148-AC1F-4FBB051F49C3}
-		{CE1AB52D-FDA8-41F8-975B-0D7BA605BD2E} = {29C18A67-2651-4148-AC1F-4FBB051F49C3}
 		{A88CF162-E0EC-4213-9964-543ECA2BEE87} = {29C18A67-2651-4148-AC1F-4FBB051F49C3}
+		{03310247-D78B-4C19-A0C4-34FE0A0BC5CC} = {29C18A67-2651-4148-AC1F-4FBB051F49C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6715B33-484B-478C-B1B8-C13B73ED3938}

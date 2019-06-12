@@ -69,7 +69,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 return Json(new
                 {
-                    DataReferencia = contribs.First().DT_MOVIMENTO,
+                    DataReferencia = $"01/{contribs.First().MES_REF}/{contribs.First().ANO_REF}",
                     contribs.First().SRC,
                     Percentual = contribsIndividuais.VL_PERC_PAR,
                     Itens = listaContribs

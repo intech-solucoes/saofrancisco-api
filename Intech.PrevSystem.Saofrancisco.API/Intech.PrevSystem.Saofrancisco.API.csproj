@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
     </PropertyGroup>
     <ItemGroup>
       <Compile Remove="Relatorios\**" />
@@ -12,13 +12,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Intech.Lib.Dapper" Version="1.0.1" />
-        <PackageReference Include="Intech.Lib.Web" Version="1.0.2" />
+        <PackageReference Include="Intech.Lib.Dapper" Version="1.0.2" />
+        <PackageReference Include="Intech.Lib.Util" Version="1.0.3" />
+        <PackageReference Include="Intech.Lib.Web" Version="1.0.3.1" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\lab\OpenHtmlToPdf\OpenHtmlToPdf.csproj" />
+      <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,6 +32,5 @@
     <Import Project="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems" Label="Shared" Condition="Exists('..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems')" />
     <Import Project="..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" />
     <Import Project="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems" Label="Shared" />
-    <Import Project="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.projitems" Label="Shared" />
     <Import Project="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" />
 </Project>
