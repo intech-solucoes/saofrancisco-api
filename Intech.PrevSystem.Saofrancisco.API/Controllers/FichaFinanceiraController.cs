@@ -61,18 +61,25 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var listaContribs = new List<Tuple<string, decimal>>
                 {
                     new Tuple<string, decimal>("Contribuição Participante", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "31").CONTRIB_PARTICIPANTE.Value),
-                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA.Value),
-                    new Tuple<string, decimal>("Taxa Administrativa", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "32").CONTRIB_PARTICIPANTE.Value * -1M)
+                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA.Value)
                 };
-
                 listaContribs.Add(new Tuple<string, decimal>("Total", listaContribs.Sum(x => x.Item2)));
+                
+                var listaDescontos = new List<Tuple<string, decimal>>();
+                var descontos = contribs.Where(x => x.CD_OPERACAO == "D" && x.COMPOE_SALDO_BENEFICIO == "N").ToList();
+                foreach(var desconto in descontos)
+                {
+                    listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_PARTICIPANTE.Value));
+                }
+                listaDescontos.Add(new Tuple<string, decimal>("Total", listaDescontos.Sum(x => x.Item2)));
 
                 return Json(new
                 {
                     DataReferencia = $"01/{contribs.First().MES_REF}/{contribs.First().ANO_REF}",
                     contribs.First().SRC,
                     Percentual = contribsIndividuais.VL_PERC_PAR,
-                    Itens = listaContribs
+                    Contribuicoes = listaContribs,
+                    Descontos = listaDescontos
                 });
             }
             catch (Exception ex)
