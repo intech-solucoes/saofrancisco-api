@@ -1,35 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-    <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
-        <Version>0.0.2</Version>
-    </PropertyGroup>
-    <ItemGroup>
-      <Compile Remove="Relatorios\**" />
-      <Content Remove="Relatorios\**" />
-      <EmbeddedResource Remove="Relatorios\**" />
-      <None Remove="Relatorios\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Intech.Lib.Dapper" Version="1.0.2" />
-        <PackageReference Include="Intech.Lib.Util" Version="1.0.3" />
-        <PackageReference Include="Intech.Lib.Web" Version="1.0.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
-      <ProjectReference Include="..\OpenHtmlToPdf\OpenHtmlToPdf.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="imagens\logo.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <Import Project="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems" Label="Shared" Condition="Exists('..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.projitems')" />
-    <Import Project="..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" />
-    <Import Project="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.projitems" Label="Shared" />
-    <Import Project="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" />
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.0.2</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Relatorios\ExtratoContribuicoes.repx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Relatorios\ExtratoContribuicoes.repx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.11" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
+    <ProjectReference Include="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="imagens\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\brasil.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems" Label="Shared" />
+  <Import Project="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.projitems" Label="Shared" />
 </Project>

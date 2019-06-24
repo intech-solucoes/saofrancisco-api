@@ -11,12 +11,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     public class DashboardController : BaseController
     {
 
-        [HttpGet("{cdPlano}")]
-        [Authorize("Bearer")]
-        public IActionResult Get(string cdPlano)
-        {
+        //[HttpGet("{cdPlano}")]
+        //[Authorize("Bearer")]
+        //public IActionResult Get(string cdPlano)
+        //{
 
-            return Json( new Dashboard().Buscar(CdFundacao, cdPlano, Inscricao));
-        }
+        //    return Json( new Dashboard().Buscar(CdFundacao, cdPlano, Inscricao));
+        //}
     }
 }

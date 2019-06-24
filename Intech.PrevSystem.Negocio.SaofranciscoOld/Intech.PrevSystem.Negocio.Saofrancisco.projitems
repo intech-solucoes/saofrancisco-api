@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Dashboard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Relatorios\RelatorioExtratoContribuicoes.cs" />
   </ItemGroup>
 </Project>

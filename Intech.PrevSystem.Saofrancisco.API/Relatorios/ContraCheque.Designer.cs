@@ -1,4 +1,7 @@
-﻿namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
+﻿using System.Drawing;
+using System.IO;
+
+namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
 {
     partial class ContraCheque
     {
@@ -42,7 +45,7 @@
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow1 = new DevExpress.XtraReports.UI.XRTableRow();
             this.xrTableCell1 = new DevExpress.XtraReports.UI.XRTableCell();
-            //this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
+            this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             this.xrTableCell2 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrLabel4 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel3 = new DevExpress.XtraReports.UI.XRLabel();
@@ -272,13 +275,13 @@
             // 
             // xrPictureBox1
             // 
-            //this.xrPictureBox1.Borders = DevExpress.XtraPrinting.BorderSide.None;
-            //this.xrPictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("xrPictureBox1.Image")));
-            //this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(10.00001F, 0F);
-            //this.xrPictureBox1.Name = "xrPictureBox1";
-            //this.xrPictureBox1.SizeF = new System.Drawing.SizeF(191.9166F, 108.3333F);
-            //this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
-            //this.xrPictureBox1.StylePriority.UseBorders = false;
+            this.xrPictureBox1.Borders = DevExpress.XtraPrinting.BorderSide.None;
+            this.xrPictureBox1.Image = Image.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "imagens", "logo.png"));
+            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(10.00001F, 0F);
+            this.xrPictureBox1.Name = "xrPictureBox1";
+            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(191.9166F, 108.3333F);
+            this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
+            this.xrPictureBox1.StylePriority.UseBorders = false;
             // 
             // xrTableCell2
             // 

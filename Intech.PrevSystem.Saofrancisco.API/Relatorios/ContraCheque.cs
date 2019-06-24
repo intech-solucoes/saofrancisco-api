@@ -1,5 +1,6 @@
 ﻿#region Usings
 using Intech.PrevSystem.Entidades;
+using Intech.PrevSystem.Negocio.Proxy;
 using System;
 using System.Linq; 
 #endregion
@@ -13,9 +14,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             InitializeComponent();
         }
 
-        public void GerarRelatorio(dynamic demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano)
+        public void GerarRelatorio(Contracheque demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano)
         {
-            var dataReferencia = (DateTime)demonstrativo.Resumo.Referencia;
+            var dataReferencia = demonstrativo.Resumo.Referencia;
 
             xrLabelDataReferencia.Text = $"{dataReferencia.MesPorExtenso()}/{dataReferencia.Year}";
             xrLabelNome.Text = entidade.NOME_ENTID;

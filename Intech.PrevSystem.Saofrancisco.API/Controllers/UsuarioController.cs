@@ -13,9 +13,19 @@ using System.Globalization;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
+    /// <summary>
+    /// Usuario Controller
+    /// Rota Base: /usuario
+    /// </summary>
     [Route("api/[controller]")]
     public class UsuarioController : BaseController
     {
+        /// <summary>
+        /// Verifica se o usuário atual está logado.
+        /// 
+        /// Rota: [GET] /usuario
+        /// </summary>
+        /// <returns>200 OK</returns>
         [HttpGet]
         [Authorize("Bearer")]
         public IActionResult Get()
@@ -33,6 +43,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Verifica se o usuário é administrador.
+        /// 
+        /// Rota: [GET] /usuario/admin
+        /// </summary>
+        /// <returns>Retorna true caso o usuário seja administrador</returns>
         [HttpGet("admin")]
         [Authorize("Bearer")]
         public IActionResult GetAdmin()
@@ -55,18 +71,25 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Seleciona um participante por cpf.
+        /// 
+        /// Rota: [POST] /usuario/selecionar
+        /// </summary>
+        /// <param name="signingConfigurations">Parâmetro preenchido por injeção de dependência</param>
+        /// <param name="tokenConfigurations">Parâmetro preenchido por injeção de dependência</param>
+        /// <param name="login">{ Cpf: "12345678901" }</param>
+        /// <returns>Retorna o token da sessão do participante.</returns>
         [HttpPost("selecionar")]
         [Authorize("Bearer")]
         public IActionResult Selecionar(
             [FromServices] SigningConfigurations signingConfigurations,
             [FromServices] TokenConfigurations tokenConfigurations,
-            [FromBody] dynamic login)
+            [FromBody] LoginEntidade login)
         {
             try
             {
-                string cpf = login.Cpf.Value;
-
-                return MontarToken(signingConfigurations, tokenConfigurations, cpf, "", true);
+                return MontarToken(signingConfigurations, tokenConfigurations, login.Cpf, "", true);
             }
             catch (Exception ex)
             {
@@ -74,25 +97,132 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Realiza login com usuário e senha do participante.
+        /// 
+        /// Rota: [POST] /usuario/login
+        /// </summary>
+        /// <param name="signingConfigurations">Parâmetro preenchido por injeção de dependência</param>
+        /// <param name="tokenConfigurations">Parâmetro preenchido por injeção de dependência</param>
+        /// <param name="login">{ Cpf: "12345678901", Senha: "123" }</param>
+        /// <returns>Retorna o token da sessão do participante.</returns>
         [HttpPost("login")]
         [AllowAnonymous]
         public IActionResult Login(
             [FromServices] SigningConfigurations signingConfigurations,
             [FromServices] TokenConfigurations tokenConfigurations,
-            [FromBody] dynamic login)
+            [FromBody] LoginEntidade login)
         {
             try
             {
-                string cpf = login.Cpf.Value;
-                string senha = login.Senha.Value;
-
-                return MontarToken(signingConfigurations, tokenConfigurations, cpf, senha);
+                return MontarToken(signingConfigurations, tokenConfigurations, login.Cpf, login.Senha);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Cria acesso do participante, enviando a nova senha para o e-mail do participante.
+        /// 
+        /// Rota: [POST] /usuario/criarAcesso
+        /// </summary>
+        /// <param name="data">{ Cpf: "12345678901", DataNascimento: "01/01/0001" }</param>
+        /// <returns>retorna a mensagem de criação do novo acesso.</returns>
+        [HttpPost("criarAcesso")]
+        [AllowAnonymous]
+        public IActionResult CriarAcesso([FromBody] LoginEntidade data)
+        {
+            try
+            {
+                return Json(new UsuarioProxy().CriarAcesso(data.Cpf, data.DataNascimento));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Cria acesso para usuários internos.
+        /// </summary>
+        /// <param name="data">{ Cpf: "12345678901", Chave: "123" }</param>
+        /// <returns>200 OK</returns>
+        [HttpPost("criarAcessoIntech")]
+        [AllowAnonymous]
+        public IActionResult CriarAcessoIntech([FromBody] LoginEntidade data)
+        {
+            try
+            {
+                new UsuarioProxy().CriarAcessoIntech(data.Cpf, data.Chave);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Altera a senha do participante logado.
+        /// </summary>
+        /// <param name="data">{ SenhaAntiga: "123", SenhaNova: "123" }</param>
+        /// <returns>Retorna a mensagem de alteração efetuada com sucesso.</returns>
+        [HttpPost("alterarSenha")]
+        [Authorize("Bearer")]
+        public IActionResult AlterarSenha([FromBody] LoginEntidade data)
+        {
+            try
+            {
+                return Json(new UsuarioProxy().AlterarSenha(Cpf, data.SenhaAntiga, data.SenhaNova));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //[HttpGet("menu")]
+        //[Authorize("Bearer")]
+        //public IActionResult Menu()
+        //{
+        //    try
+        //    {
+        //        var dadosPlano = new PlanoVinculadoProxy().BuscarPorFundacaoMatricula(CdFundacao, Matricula);
+
+        //        var menuAtivos = new List<string> {
+        //            "home",
+        //            "dados",
+        //            "plano",
+        //            "emprestimos",
+        //            "trocarSenha",
+        //            "relacionamento"
+        //        };
+
+        //        var menuAssistidos = new List<string> {
+        //            "home",
+        //            "dados",
+        //            "beneficios",
+        //            "emprestimos",
+        //            "trocarSenha",
+        //            "relacionamento"
+        //        };
+
+        //        if (dadosPlano.IsAtivo())
+        //            return Json(menuAtivos);
+        //        else
+        //            return Json(menuAssistidos);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        #region Métodos Provados
 
         private IActionResult MontarToken(SigningConfigurations signingConfigurations, TokenConfigurations tokenConfigurations, string cpf, string senha, bool semSenha = false)
         {
@@ -174,93 +304,6 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("criarAcesso")]
-        [AllowAnonymous]
-        public IActionResult CriarAcesso([FromBody] dynamic data)
-        {
-            try
-            {
-                string cpf = data.Cpf.Value;
-                DateTime dataNascimento = data.DataNascimento.Value;
-
-                return Json(new UsuarioProxy().CriarAcesso(cpf, dataNascimento));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("criarAcessoIntech")]
-        [AllowAnonymous]
-        public IActionResult CriarAcessoIntech([FromBody] dynamic data)
-        {
-            try
-            {
-                string cpf = data.Cpf.Value;
-                string chave = data.Chave.Value;
-                new UsuarioProxy().CriarAcessoIntech(cpf, chave);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("alterarSenha")]
-        [Authorize("Bearer")]
-        public IActionResult AlterarSenha([FromBody] dynamic data)
-        {
-            try
-            {
-                string senhaAntiga = data.senhaAntiga.Value;
-                string senhaNova = data.senhaNova.Value;
-
-                return Json(new UsuarioProxy().AlterarSenha(Cpf, senhaAntiga, senhaNova));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        //[HttpGet("menu")]
-        //[Authorize("Bearer")]
-        //public IActionResult Menu()
-        //{
-        //    try
-        //    {
-        //        var dadosPlano = new PlanoVinculadoProxy().BuscarPorFundacaoMatricula(CdFundacao, Matricula);
-
-        //        var menuAtivos = new List<string> {
-        //            "home",
-        //            "dados",
-        //            "plano",
-        //            "emprestimos",
-        //            "trocarSenha",
-        //            "relacionamento"
-        //        };
-
-        //        var menuAssistidos = new List<string> {
-        //            "home",
-        //            "dados",
-        //            "beneficios",
-        //            "emprestimos",
-        //            "trocarSenha",
-        //            "relacionamento"
-        //        };
-
-        //        if (dadosPlano.IsAtivo())
-        //            return Json(menuAtivos);
-        //        else
-        //            return Json(menuAssistidos);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        #endregion
     }
 }

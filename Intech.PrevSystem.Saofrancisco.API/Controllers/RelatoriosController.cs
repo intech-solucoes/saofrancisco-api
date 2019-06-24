@@ -9,30 +9,30 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     [ApiController]
     public class RelatoriosController : BaseController
     {
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Get([FromBody] dynamic content)
-        {
-            try
-            {
-                var html = (string)content.html;
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public IActionResult Get([FromBody] dynamic content)
+        //{
+        //    try
+        //    {
+        //        var html = (string)content.html;
 
-                var pdf = OpenHtmlToPdf.Pdf
-                    .From(html)
-                    //.WithGlobalSetting("orientation", "Landscape")
-                    .WithObjectSetting("web.defaultEncoding", "utf-8")
-                    .WithObjectSetting("footer.right", "[page]/[topage]")
-                    .Content();
+        //        var pdf = OpenHtmlToPdf.Pdf
+        //            .From(html)
+        //            //.WithGlobalSetting("orientation", "Landscape")
+        //            .WithObjectSetting("web.defaultEncoding", "utf-8")
+        //            .WithObjectSetting("footer.right", "[page]/[topage]")
+        //            .Content();
 
-                return File(pdf, "application/pdf");
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException != null)
-                    return BadRequest(ex.InnerException.Message);
+        //        return File(pdf, "application/pdf");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (ex.InnerException != null)
+        //            return BadRequest(ex.InnerException.Message);
 
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }
