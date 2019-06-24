@@ -8,7 +8,7 @@ using System;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
-    [Route(RotasApi.Depentende)]
+    [Route(RotasApi.Dependente)]
     public class DependenteController : BaseController
     {
         [HttpGet]
