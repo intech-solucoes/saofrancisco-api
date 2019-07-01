@@ -69,7 +69,10 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var descontos = contribs.Where(x => x.CD_OPERACAO == "D" && x.COMPOE_SALDO_BENEFICIO == "N").ToList();
                 foreach(var desconto in descontos)
                 {
-                    listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_PARTICIPANTE.Value));
+                    if(desconto.CONTRIB_PARTICIPANTE.HasValue && desconto.CONTRIB_PARTICIPANTE.Value > 0)
+                        listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_PARTICIPANTE.Value));
+                    else if(desconto.CONTRIB_EMPRESA.HasValue && desconto.CONTRIB_EMPRESA.Value > 0)
+                        listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_EMPRESA.Value));
                 }
                 listaDescontos.Add(new Tuple<string, decimal>("Total", listaDescontos.Sum(x => x.Item2)));
 
