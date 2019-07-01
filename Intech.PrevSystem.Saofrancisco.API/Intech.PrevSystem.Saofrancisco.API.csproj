@@ -8,10 +8,14 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Relatorios\Contracheque.repx" />
     <None Remove="Relatorios\ExtratoContribuicoes.repx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Relatorios\ExtratoContribuicoes.repx" />
+    <EmbeddedResource Include="Relatorios\Contracheque.repx" />
+    <EmbeddedResource Include="Relatorios\ExtratoContribuicoes.repx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.11" />
