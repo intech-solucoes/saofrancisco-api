@@ -55,13 +55,14 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                var contribsBasicas = new FichaFechamentoProxy().BuscarUltimaPorFundacaoEmpresaPlanoInscricao(CdFundacao, CdEmpresa, cdPlano, Inscricao);
                 var contribs = new FichaFinanceiraProxy().BuscarUltimaPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
                 var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, "31");
 
                 var listaContribs = new List<Tuple<string, decimal>>
                 {
-                    new Tuple<string, decimal>("Contribuição Participante", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "31").CONTRIB_PARTICIPANTE.Value),
-                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribs.Single(x => x.CD_TIPO_CONTRIBUICAO == "35").CONTRIB_EMPRESA.Value)
+                    new Tuple<string, decimal>("Contribuição Participante", contribsBasicas.VL_GRUPO1),
+                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribsBasicas.VL_GRUPO2)
                 };
                 listaContribs.Add(new Tuple<string, decimal>("Total", listaContribs.Sum(x => x.Item2)));
                 
