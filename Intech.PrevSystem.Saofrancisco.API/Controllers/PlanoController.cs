@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.CodeDom.Compiler;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,6 +22,20 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         public PlanoController(IHostingEnvironment hostingEnvironment)
         {
             HostingEnvironment = hostingEnvironment;
+        }
+
+        [HttpGet("saldado")]
+        [Authorize("Bearer")]
+        public IActionResult GetSaldado()
+        {
+            try
+            {
+                return Json(new PlanoVinculadoProxy().FSFBuscarSaldado(CdFundacao, "0003", Inscricao));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]

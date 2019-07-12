@@ -44,7 +44,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow1 = new DevExpress.XtraReports.UI.XRTableRow();
-            this.xrTableCell1 = new DevExpress.XtraReports.UI.XRTableCell();
+            //this.xrTableCell1 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             this.xrTableCell2 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrLabel4 = new DevExpress.XtraReports.UI.XRLabel();
@@ -261,17 +261,17 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             // xrTableRow1
             // 
             this.xrTableRow1.Cells.AddRange(new DevExpress.XtraReports.UI.XRTableCell[] {
-            this.xrTableCell1,
+            //this.xrTableCell1,
             this.xrTableCell2});
             this.xrTableRow1.Name = "xrTableRow1";
             this.xrTableRow1.Weight = 1D;
             // 
             // xrTableCell1
             // 
-            this.xrTableCell1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {});
-            this.xrTableCell1.Name = "xrTableCell1";
-            this.xrTableCell1.Text = "xrTableCell1";
-            this.xrTableCell1.Weight = 0.52781238294627575D;
+            //this.xrTableCell1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {});
+            //this.xrTableCell1.Name = "xrTableCell1";
+            //this.xrTableCell1.Text = "xrTableCell1";
+            //this.xrTableCell1.Weight = 0.52781238294627575D;
             // 
             // xrPictureBox1
             // 
@@ -305,7 +305,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel4.StylePriority.UseBorders = false;
             this.xrLabel4.StylePriority.UseFont = false;
             this.xrLabel4.StylePriority.UseTextAlignment = false;
-            this.xrLabel4.Text = "(27) 3322-9288";
+            this.xrLabel4.Text = "(61) 2195-5400 / 0800-722553";
             this.xrLabel4.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel3
@@ -319,7 +319,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel3.StylePriority.UseBorders = false;
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
-            this.xrLabel3.Text = "ENSEADA DA SUÁ, VITÓRIA - ES";
+            this.xrLabel3.Text = "BRASÍLIA - DF";
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel2
@@ -333,7 +333,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel2.StylePriority.UseBorders = false;
             this.xrLabel2.StylePriority.UseFont = false;
             this.xrLabel2.StylePriority.UseTextAlignment = false;
-            this.xrLabel2.Text = "RUA MARÍLIA DE REZENDE SCARTON COUTINHO, 180";
+            this.xrLabel2.Text = "SBN QUADRA 2 BLOCO H 8º ANDAR EDIFICIO CENTRAL";
             this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel1
@@ -344,7 +344,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 96F);
             this.xrLabel1.SizeF = new System.Drawing.SizeF(571.0833F, 23F);
-            this.xrLabel1.Text = "PREVIDÊNCIA COMPLEMENTAR DO ESTADO DO ESPÍRITO SANTO";
+            this.xrLabel1.Text = "FUNDAÇÃO SÃO FRANCISCO DE SEGURIDADE SOCIAL";
             this.xrLabel1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrTable2

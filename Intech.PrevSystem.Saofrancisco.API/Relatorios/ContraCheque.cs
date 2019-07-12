@@ -43,7 +43,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             xrLabelAgencia.Text = entidade.NUM_AGENCIA;
             xrLabelConta.Text = entidade.NUM_CONTA;
 
-            //xrLabelMensagens.Text = demonstrativo.;
+            xrLabelMensagens.Text = "(Confere com o Original)";
 
             foreach (var item in demonstrativo.Proventos)
                 PreencherDataTable(item);

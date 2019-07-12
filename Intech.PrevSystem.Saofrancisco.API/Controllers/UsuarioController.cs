@@ -242,6 +242,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             string codEntid;
             string seqRecebedor;
             string grupoFamilia;
+            string codEntidFuncionario = "";
             var funcionario = funcionarioProxy.BuscarPrimeiroPorCpf(cpf);
 
             if (funcionario != null)
@@ -259,6 +260,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 codEntid = recebedorBeneficio.COD_ENTID.ToString();
                 funcionario = funcionarioProxy.BuscarPorMatricula(recebedorBeneficio.NUM_MATRICULA);
+                codEntidFuncionario = funcionario.COD_ENTID.ToString();
                 pensionista = true;
                 seqRecebedor = recebedorBeneficio.SEQ_RECEBEDOR.ToString();
                 grupoFamilia = recebedorBeneficio.NUM_SEQ_GR_FAMIL.ToString();
@@ -277,6 +279,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var claims = new List<KeyValuePair<string, string>> {
                     new KeyValuePair<string, string>("Cpf", dadosPessoais.CPF_CGC),
                     new KeyValuePair<string, string>("CodEntid", codEntid),
+                    new KeyValuePair<string, string>("CodEntidFuncionario", codEntidFuncionario),
                     new KeyValuePair<string, string>("Matricula", funcionario.NUM_MATRICULA),
                     new KeyValuePair<string, string>("Inscricao", funcionario.NUM_INSCRICAO),
                     new KeyValuePair<string, string>("CdFundacao", funcionario.CD_FUNDACAO),

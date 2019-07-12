@@ -78,6 +78,10 @@
       <Project>{fc1824df-5a52-4d42-919c-5ef4ac83dcaf}</Project>
       <Name>Intech.Lib.Dapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Email\Intech.Lib.Email.csproj">
+      <Project>{F475A56F-7D29-482E-8B11-8DBDDEEC578B}</Project>
+      <Name>Intech.Lib.Email</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.SMS\Intech.Lib.SMS.csproj">
       <Project>{1a7ee38b-c4ff-4ca7-826f-8e81d36728db}</Project>
       <Name>Intech.Lib.SMS</Name>

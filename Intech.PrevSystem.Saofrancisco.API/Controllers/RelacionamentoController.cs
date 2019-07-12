@@ -1,6 +1,6 @@
 ﻿#region Usings
 using System;
-using Intech.Lib.Util.Email;
+using Intech.Lib.Email;
 using Intech.PrevSystem.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration; 

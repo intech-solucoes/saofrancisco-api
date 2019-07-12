@@ -1,5 +1,6 @@
 ﻿using DevExpress.XtraReports.UI;
 using Intech.PrevSystem.Entidades;
+using Intech.PrevSystem.Negocio.Proxy;
 using System;
 using System.Drawing;
 using System.IO;
@@ -213,7 +214,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
                 xrLabel701Valor.Text = BuscarValor("701");
             }
 
-            xrLabelResponsavelNome.Text = "[NOME RESPONSAVEL]";
+            var dirf = new DirfProxy().Buscar().First();
+
+            xrLabelResponsavelNome.Text = dirf.NOME_RESPONSAVEL;
             xrLabelData.Text = DateTime.Now.ToString("dd/MM/yyyy");
         }
 

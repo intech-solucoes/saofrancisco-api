@@ -65,17 +65,14 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     new Tuple<string, decimal>("Contribuição Patrocinadora", contribsBasicas.VL_GRUPO2)
                 };
                 listaContribs.Add(new Tuple<string, decimal>("Total", listaContribs.Sum(x => x.Item2)));
-                
-                var listaDescontos = new List<Tuple<string, decimal>>();
-                var descontos = contribs.Where(x => x.CD_OPERACAO == "D" && x.COMPOE_SALDO_BENEFICIO == "N").ToList();
-                foreach(var desconto in descontos)
+
+                // Buscar custeios
+                var listaDescontos = new FichaFinanceiraProxy().BuscarResumoCusteio(CdFundacao, Inscricao, cdPlano).ToList();
+                listaDescontos.Add(new FichaFinanceiraEntidade
                 {
-                    if(desconto.CONTRIB_PARTICIPANTE.HasValue && desconto.CONTRIB_PARTICIPANTE.Value > 0)
-                        listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_PARTICIPANTE.Value));
-                    else if(desconto.CONTRIB_EMPRESA.HasValue && desconto.CONTRIB_EMPRESA.Value > 0)
-                        listaDescontos.Add(new Tuple<string, decimal>(desconto.DS_TIPO_CONTRIBUICAO, desconto.CONTRIB_EMPRESA.Value));
-                }
-                listaDescontos.Add(new Tuple<string, decimal>("Total", listaDescontos.Sum(x => x.Item2)));
+                    CONTRIB_PARTICIPANTE = listaDescontos.Sum(x => x.CONTRIB_PARTICIPANTE),
+                    DS_AGRUPADOR_WEB = "Total"
+                });
 
                 return Json(new
                 {
@@ -83,7 +80,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     contribs.First().SRC,
                     Percentual = contribsIndividuais.VL_PERC_PAR,
                     Contribuicoes = listaContribs,
-                    Descontos = listaDescontos
+                    Descontos = listaDescontos,
+                    Liquido = listaContribs.Last().Item2 - listaDescontos.Last().CONTRIB_PARTICIPANTE
                 });
             }
             catch (Exception ex)
