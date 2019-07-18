@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.0.2</Version>
+    <Version>0.0.4</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>
@@ -10,12 +10,14 @@
   <ItemGroup>
     <None Remove="Relatorios\Contracheque.repx" />
     <None Remove="Relatorios\ExtratoContribuicoes.repx" />
+    <None Remove="Relatorios\ExtratoSaldado.repx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Relatorios\Contracheque.repx" />
     <EmbeddedResource Include="Relatorios\ExtratoContribuicoes.repx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Relatorios\ExtratoSaldado.repx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.11" />

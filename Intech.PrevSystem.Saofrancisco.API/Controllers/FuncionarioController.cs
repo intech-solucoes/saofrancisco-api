@@ -9,8 +9,22 @@ using System;
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
     [Route(RotasApi.Funcionario)]
-    public class FuncionarioController : BaseFuncionarioController
+    public class FuncionarioController : BaseController
     {
+        [HttpGet]
+        [Authorize("Bearer")]
+        public IActionResult Buscar()
+        {
+            try
+            {
+                return Json(new FuncionarioProxy().BuscarDadosPorCodEntid(CodEntid, CodEntidFuncionario));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("pesquisar")]
         [Authorize("Bearer")]
         public IActionResult Pesquisar([FromBody] PesquisaDados dados)
