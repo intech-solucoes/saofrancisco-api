@@ -44,6 +44,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                var nomeArquivoRepx = "ExtratoContribuicoes";
+                if (cdPlano == "0003")
+                    nomeArquivoRepx = "ExtratoSaldado";
+
+                var relatorio = XtraReport.FromFile($"Relatorios/{nomeArquivoRepx}.repx");
+
                 var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
                 var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
 
@@ -53,19 +59,95 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var funcionario = new FuncionarioProxy().BuscarDadosPorCodEntid(CodEntid);
                 var fundacao = new FundacaoProxy().BuscarPorCodigo(CdFundacao);
                 var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano);
-                var ficha = new FichaFechamentoProxy().BuscarRelatorioPorFundacaoEmpresaPlanoInscricaoReferencia(CdFundacao, CdEmpresa, cdPlano, Inscricao, AnoRefMesRefInicio, AnoRefMesRefFim);
 
                 fundacao.CEP_ENTID = fundacao.CEP_ENTID.AplicarMascara(Mascaras.CEP);
                 fundacao.CPF_CGC = fundacao.CPF_CGC.AplicarMascara(Mascaras.CNPJ);
 
-                var nomeArquivoRepx = "ExtratoContribuicoes";
-                var relatorio = XtraReport.FromFile($"Relatorios/{nomeArquivoRepx}.repx");
-
                 ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "funcionario").Value = funcionario;
                 ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "fundacao").Value = fundacao;
                 ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "plano").Value = plano;
-                ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "ficha").Value = ficha;
                 ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "periodo").Value = $"{dataInicio.ToString("MM/yyyy")} a {dataFim.ToString("MM/yyyy")}";
+                
+                if (cdPlano == "0003")
+                {
+                    var ficha = new FichaFinanceiraProxy().BuscarExtrato(CdFundacao, cdPlano, Inscricao, dataInicio, dataFim);
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "ficha").Value = ficha;
+
+                    var listaFichaSaldo = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricaoPeriodoTipoResgate(CdFundacao, cdPlano, Inscricao, dataInicio, dataFim, "01");
+
+                    var qntCotaFD = 0M;
+                    var qntCotaRP = 0M;
+                    foreach(var fichaSaldo in listaFichaSaldo)
+                    {
+                        if (fichaSaldo.CD_OPERACAO == "D")
+                        {
+                            qntCotaFD += fichaSaldo.QTD_COTA_FD_PARTICIPANTE.Value * -1;
+                            qntCotaRP += fichaSaldo.QTD_COTA_RP_PARTICIPANTE.Value * -1;
+                        }
+                        else
+                        {
+                            qntCotaFD += fichaSaldo.QTD_COTA_FD_PARTICIPANTE.Value;
+                            qntCotaRP += fichaSaldo.QTD_COTA_RP_PARTICIPANTE.Value;
+                        }
+                    }
+
+                    var empresaPlano = new EmpresaPlanosProxy().BuscarPorFundacaoEmpresaPlano(CdFundacao, CdEmpresa, cdPlano);
+                    var indiceFD = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_FUNDO).First();
+                    var indiceRP = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_RESERVA_POUP).First();
+
+                    var valorFD = qntCotaFD * (indiceFD.VALOR_IND / 100);
+                    var valorRP = qntCotaRP * (indiceRP.VALOR_IND / 100);
+
+                    var calculoRP = true;
+                    var saldoAtualizado = 0M;
+
+                    if (valorRP > valorFD) {
+                        saldoAtualizado = valorRP;
+                    } else
+                    {
+                        saldoAtualizado = valorFD;
+                        calculoRP = false;
+                    }
+
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "saldoAtualizado").Value = saldoAtualizado;
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "dataEmissao").Value = DateTime.Now;
+
+                    var qntCotasTotal = 0M;
+                    var valorBruto = 0M;
+                    DateTime dataConversao;
+
+                    if (calculoRP)
+                    {
+                        qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldado(CdFundacao, cdPlano, Inscricao);
+                        valorBruto = qntCotasTotal * (valorRP * 100);
+                        dataConversao = indiceRP.DT_IND;
+                    }
+                    else
+                    {
+                        if (plano.DT_INSC_PLANO > new DateTime(1998, 12, 3))
+                        {
+                            qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDApos98(CdFundacao, cdPlano, Inscricao);
+                            valorBruto = qntCotasTotal * (valorFD * 100);
+                        }
+                        else
+                        {
+                            var percentual = new ValoresPercIdadeProxy().BuscarPercentual(CdFundacao, cdPlano, Inscricao);
+                            qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDAntes98(CdFundacao, cdPlano, Inscricao, percentual);
+                            valorBruto = qntCotasTotal * (valorFD * 100);
+                        }
+
+                        dataConversao = indiceFD.DT_IND;
+                    }
+
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "valorBruto").Value = valorBruto;
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "quantidadeCotas").Value = qntCotasTotal;
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "dataConversao").Value = dataConversao;
+                }
+                else
+                {
+                    var ficha = new FichaFechamentoProxy().BuscarRelatorioPorFundacaoEmpresaPlanoInscricaoReferencia(CdFundacao, CdEmpresa, cdPlano, Inscricao, AnoRefMesRefInicio, AnoRefMesRefFim);
+                    ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "ficha").Value = ficha;
+                }
 
                 using (MemoryStream ms = new MemoryStream())
                 {

@@ -3,6 +3,7 @@ using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
@@ -30,15 +31,28 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                var dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
+                var dataInicial = DateTime.Now;
+                var dataFinal = DateTime.Now;
 
-                if (dataFinal == null)
-                    dataFinal = DateTime.Now;
+                if (cdPlano == "0003")
+                {
+                    var listaFicha = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao).ToList();
+
+                    var ultimaFicha = listaFicha.Last();
+                    dataInicial = new DateTime(Convert.ToInt32(ultimaFicha.ANO_REF), Convert.ToInt32(ultimaFicha.MES_REF), 1);
+
+                    var primeiraFicha = listaFicha.First();
+                    dataFinal = new DateTime(Convert.ToInt32(primeiraFicha.ANO_REF), Convert.ToInt32(primeiraFicha.MES_REF), 1);
+                }
+                else
+                {
+                    dataInicial = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano).DT_INSC_PLANO;
+                    dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
+                }
 
                 return Json(new
                 {
-                    //DataInicial = new FichaFechamentoProxy().BuscarDataPrimeiraContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao),
-                    DataInicial = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano).DT_INSC_PLANO,
+                    DataInicial = dataInicial,
                     DataFinal = dataFinal
                 });
 
