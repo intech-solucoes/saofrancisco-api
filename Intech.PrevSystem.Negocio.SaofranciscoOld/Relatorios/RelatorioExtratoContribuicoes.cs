@@ -5,25 +5,19 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Relatorios
 {
     public class RelatorioExtratoContribuicoes
     {
-        public List<FuncionarioDados> Funcionario { get; set; }
-        public List<FundacaoEntidade> Fundacao { get; set; }
-        public List<PlanoVinculadoEntidade> Plano { get; set; }
+        public FuncionarioDados Funcionario { get; set; }
+        public FundacaoEntidade Fundacao { get; set; }
+        public PlanoVinculadoEntidade Plano { get; set; }
+        public List<FichaFechamentoEntidade> Ficha { get; set; }
+        public string Periodo { get; set; }
 
-        public RelatorioExtratoContribuicoes(FuncionarioDados funcionario, FundacaoEntidade fundacao, PlanoVinculadoEntidade plano)
+        public RelatorioExtratoContribuicoes(FuncionarioDados funcionario, FundacaoEntidade fundacao, PlanoVinculadoEntidade plano, List<FichaFechamentoEntidade> ficha, string periodo)
         {
-            Funcionario = new List<FuncionarioDados> {
-                funcionario
-            };
-
-            Fundacao = new List<FundacaoEntidade>
-            {
-                fundacao
-            };
-
-            Plano = new List<PlanoVinculadoEntidade>
-            {
-                plano
-            };
+            Funcionario = funcionario;
+            Fundacao = fundacao;
+            Plano = plano;
+            Ficha = ficha;
+            Periodo = periodo;
         }
     }
 }
