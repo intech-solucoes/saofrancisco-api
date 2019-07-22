@@ -95,8 +95,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     var indiceFD = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_FUNDO).First();
                     var indiceRP = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_RESERVA_POUP).First();
 
-                    var valorFD = qntCotaFD * (indiceFD.VALOR_IND / 100);
-                    var valorRP = qntCotaRP * (indiceRP.VALOR_IND / 100);
+                    var valorFD = qntCotaFD * indiceFD.VALOR_IND;
+                    var valorRP = qntCotaRP * indiceRP.VALOR_IND;
 
                     var calculoRP = true;
                     var saldoAtualizado = 0M;
@@ -119,7 +119,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     if (calculoRP)
                     {
                         qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldado(CdFundacao, cdPlano, Inscricao);
-                        valorBruto = qntCotasTotal * (valorRP * 100);
+                        valorBruto = qntCotasTotal * indiceRP.VALOR_IND;
                         dataConversao = indiceRP.DT_IND;
                     }
                     else
@@ -127,13 +127,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         if (plano.DT_INSC_PLANO > new DateTime(1998, 12, 3))
                         {
                             qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDApos98(CdFundacao, cdPlano, Inscricao);
-                            valorBruto = qntCotasTotal * (valorFD * 100);
+                            valorBruto = qntCotasTotal * indiceFD.VALOR_IND;
                         }
                         else
                         {
                             var percentual = new ValoresPercIdadeProxy().BuscarPercentual(CdFundacao, cdPlano, Inscricao);
                             qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDAntes98(CdFundacao, cdPlano, Inscricao, percentual);
-                            valorBruto = qntCotasTotal * (valorFD * 100);
+                            valorBruto = qntCotasTotal * indiceFD.VALOR_IND;
                         }
 
                         dataConversao = indiceFD.DT_IND;

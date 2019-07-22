@@ -14,13 +14,13 @@
                   </ExpressionBindings>
                   <StylePriority Ref="8" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="9" ControlType="XRTableCell" Name="tableCell2" Weight="0.74774131649611963" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
+                <Item2 Ref="9" ControlType="XRTableCell" Name="tableCell2" Weight="0.75304489302012656" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="10" Expression="[DS_TIPO_CONTRIBUICAO]" PropertyName="Text" EventName="BeforePrint" />
                   </ExpressionBindings>
                   <StylePriority Ref="11" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="12" ControlType="XRTableCell" Name="tableCell3" Weight="0.48383292076345935" TextFormatString="{0:N2}" Multiline="true" Text="Vl. Participante" TextAlignment="MiddleRight">
+                <Item3 Ref="12" ControlType="XRTableCell" Name="tableCell3" Weight="0.47852934423945243" TextFormatString="{0:N2}" Multiline="true" Text="Vl. Participante" TextAlignment="MiddleRight">
                   <ExpressionBindings>
                     <Item1 Ref="13" Expression="[CONTRIB_PARTICIPANTE]" PropertyName="Text" EventName="BeforePrint" />
                   </ExpressionBindings>
@@ -233,10 +233,10 @@
                 <Item1 Ref="106" ControlType="XRTableCell" Name="xrTableCell16" Weight="0.38916568412292085" Multiline="true" Text="Data Ref/Comp" TextAlignment="MiddleLeft">
                   <StylePriority Ref="107" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="108" ControlType="XRTableCell" Name="xrTableCell17" Weight="0.750084313549186" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
+                <Item2 Ref="108" ControlType="XRTableCell" Name="xrTableCell17" Weight="0.7500841834405092" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
                   <StylePriority Ref="109" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="110" ControlType="XRTableCell" Name="xrTableCell18" Weight="0.47852925739866814" Multiline="true" Text="Vl. Participante" TextAlignment="MiddleRight">
+                <Item3 Ref="110" ControlType="XRTableCell" Name="xrTableCell18" Weight="0.478529387507345" Multiline="true" Text="Vl. Participante" TextAlignment="MiddleRight">
                   <StylePriority Ref="111" UseTextAlignment="false" />
                 </Item3>
                 <Item4 Ref="112" ControlType="XRTableCell" Name="xrTableCell13" Weight="0.64170537526887839" Multiline="true" Text="Sal. Participação" TextAlignment="MiddleRight">
@@ -256,124 +256,76 @@
           <StylePriority Ref="118" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item2>
         <Item3 Ref="119" ControlType="XRLine" Name="line2" SizeF="794.9585,9.375" LocationFloat="1.04166663, 332.499939" />
-        <Item4 Ref="120" ControlType="XRTable" Name="table5" SizeF="794.9585,27.4999847" LocationFloat="1.04150391, 173.333313" Font="Verdana, 8pt" BackColor="White" Borders="All" BorderWidth="0">
+        <Item4 Ref="120" ControlType="XRTable" Name="table3" SizeF="794.9585,27.4999847" LocationFloat="1.04166663, 85.4166" Font="Verdana, 8pt" BackColor="White" Borders="All" BorderWidth="0">
           <Rows>
-            <Item1 Ref="121" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+            <Item1 Ref="121" ControlType="XRTableRow" Name="tableRow3" Weight="1">
               <Cells>
-                <Item1 Ref="122" ControlType="XRTableCell" Name="tableCell19" Weight="0.689682968557078" Multiline="true" Text="Valor Tributável:" TextAlignment="MiddleLeft">
+                <Item1 Ref="122" ControlType="XRTableCell" Name="tableCell5" Weight="0.689682968557078" Multiline="true" Text="Quantidade Cota:" TextAlignment="MiddleLeft">
                   <StylePriority Ref="123" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="124" ControlType="XRTableCell" Name="tableCell20" Weight="0.86210921508547989" Multiline="true" TextAlignment="MiddleLeft">
-                  <StylePriority Ref="125" UseTextAlignment="false" />
+                <Item2 Ref="124" ControlType="XRTableCell" Name="tableCell6" Weight="0.86210921508547989" TextFormatString="{0:N6}" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
+                  <ExpressionBindings>
+                    <Item1 Ref="125" Expression="[QuantidadeCotas]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="126" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="126" ControlType="XRTableCell" Name="tableCell21" Weight="0.739119199625029" TextFormatString="{0:N2}" Multiline="true" Text="Outros Descontos:" TextAlignment="MiddleRight">
-                  <StylePriority Ref="127" UseTextAlignment="false" />
+                <Item3 Ref="127" ControlType="XRTableCell" Name="tableCell9" Weight="0.739119199625029" TextFormatString="{0:N2}" Multiline="true" Text="Valor Bruto:" TextAlignment="MiddleRight">
+                  <StylePriority Ref="128" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="128" ControlType="XRTableCell" Name="tableCell22" Weight="0.83224959132670773" Multiline="true" TextAlignment="MiddleRight">
-                  <StylePriority Ref="129" UseTextAlignment="false" />
-                </Item4>
-                <Item5 Ref="130" ControlType="XRTableCell" Name="tableCell23" Weight="0.66832356914665791" Multiline="true" Text="Valor Líquido:" TextAlignment="MiddleRight">
+                <Item4 Ref="129" ControlType="XRTableCell" Name="tableCell10" Weight="0.83224959132670773" TextFormatString="{0:N2}" Multiline="true" TextAlignment="MiddleRight">
+                  <ExpressionBindings>
+                    <Item1 Ref="130" Expression="[ValorBruto]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
                   <StylePriority Ref="131" UseTextAlignment="false" />
-                </Item5>
-                <Item6 Ref="132" ControlType="XRTableCell" Name="tableCell24" Weight="0.57850042480034158" Multiline="true" TextAlignment="MiddleRight">
+                </Item4>
+                <Item5 Ref="132" ControlType="XRTableCell" Name="tableCell11" Weight="0.66832356914665791" Multiline="true" Text="Conversão:" TextAlignment="MiddleRight">
                   <StylePriority Ref="133" UseTextAlignment="false" />
-                </Item6>
-              </Cells>
-            </Item1>
-          </Rows>
-          <StylePriority Ref="134" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" />
-        </Item4>
-        <Item5 Ref="135" ControlType="XRTable" Name="table4" SizeF="570.2278,27.4999847" LocationFloat="0, 145.833328" Font="Verdana, 8pt" BackColor="White" Borders="All" BorderWidth="0">
-          <Rows>
-            <Item1 Ref="136" ControlType="XRTableRow" Name="tableRow4" Weight="1">
-              <Cells>
-                <Item1 Ref="137" ControlType="XRTableCell" Name="tableCell13" Weight="0.69540912480861206" Multiline="true" Text="Isento de Tributação:" TextAlignment="MiddleLeft">
-                  <StylePriority Ref="138" UseTextAlignment="false" />
-                </Item1>
-                <Item2 Ref="139" ControlType="XRTableCell" Name="tableCell14" Weight="0.8621094247840968" Multiline="true" TextAlignment="MiddleLeft">
-                  <StylePriority Ref="140" UseTextAlignment="false" />
-                </Item2>
-                <Item3 Ref="141" ControlType="XRTableCell" Name="tableCell15" Weight="0.739118864107242" TextFormatString="{0:N2}" Multiline="true" Text="Valor do IRRF:" TextAlignment="MiddleRight">
-                  <StylePriority Ref="142" UseTextAlignment="false" />
-                </Item3>
-                <Item4 Ref="143" ControlType="XRTableCell" Name="tableCell16" Weight="0.83797508932613185" Multiline="true" TextAlignment="MiddleRight">
-                  <StylePriority Ref="144" UseTextAlignment="false" />
-                </Item4>
-              </Cells>
-            </Item1>
-          </Rows>
-          <StylePriority Ref="145" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" />
-        </Item5>
-        <Item6 Ref="146" ControlType="XRTable" Name="table3" SizeF="794.9585,27.4999847" LocationFloat="1.04166663, 85.4166" Font="Verdana, 8pt" BackColor="White" Borders="All" BorderWidth="0">
-          <Rows>
-            <Item1 Ref="147" ControlType="XRTableRow" Name="tableRow3" Weight="1">
-              <Cells>
-                <Item1 Ref="148" ControlType="XRTableCell" Name="tableCell5" Weight="0.689682968557078" Multiline="true" Text="Quantidade Cota:" TextAlignment="MiddleLeft">
-                  <StylePriority Ref="149" UseTextAlignment="false" />
-                </Item1>
-                <Item2 Ref="150" ControlType="XRTableCell" Name="tableCell6" Weight="0.86210921508547989" TextFormatString="{0:N6}" Multiline="true" Text="D/C Histórico" TextAlignment="MiddleLeft">
-                  <ExpressionBindings>
-                    <Item1 Ref="151" Expression="[QuantidadeCotas]" PropertyName="Text" EventName="BeforePrint" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="152" UseTextAlignment="false" />
-                </Item2>
-                <Item3 Ref="153" ControlType="XRTableCell" Name="tableCell9" Weight="0.739119199625029" TextFormatString="{0:N2}" Multiline="true" Text="Valor Bruto:" TextAlignment="MiddleRight">
-                  <StylePriority Ref="154" UseTextAlignment="false" />
-                </Item3>
-                <Item4 Ref="155" ControlType="XRTableCell" Name="tableCell10" Weight="0.83224959132670773" TextFormatString="{0:N2}" Multiline="true" TextAlignment="MiddleRight">
-                  <ExpressionBindings>
-                    <Item1 Ref="156" Expression="[ValorBruto]" PropertyName="Text" EventName="BeforePrint" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="157" UseTextAlignment="false" />
-                </Item4>
-                <Item5 Ref="158" ControlType="XRTableCell" Name="tableCell11" Weight="0.66832356914665791" Multiline="true" Text="Conversão:" TextAlignment="MiddleRight">
-                  <StylePriority Ref="159" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="160" ControlType="XRTableCell" Name="tableCell12" Weight="0.57850042480034158" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" TextAlignment="MiddleRight">
+                <Item6 Ref="134" ControlType="XRTableCell" Name="tableCell12" Weight="0.57850042480034158" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="161" Expression="[DataConversao]" PropertyName="Text" EventName="BeforePrint" />
+                    <Item1 Ref="135" Expression="[DataConversao]" PropertyName="Text" EventName="BeforePrint" />
                   </ExpressionBindings>
-                  <StylePriority Ref="162" UseTextAlignment="false" />
+                  <StylePriority Ref="136" UseTextAlignment="false" />
                 </Item6>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="163" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" />
+          <StylePriority Ref="137" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" />
+        </Item4>
+        <Item5 Ref="138" ControlType="XRLine" Name="line1" SizeF="794.9585,9.375" LocationFloat="1.04166663, 76.0416" />
+        <Item6 Ref="139" ControlType="XRLabel" Name="label3" Text="Demonstrativo de Valores a Resgatar" TextAlignment="MiddleLeft" SizeF="338.759033,27.4999619" LocationFloat="0, 48.54164" Font="Verdana, 10pt, style=Bold" Padding="2,2,0,0,100" Borders="None">
+          <StylePriority Ref="140" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="164" ControlType="XRLine" Name="line1" SizeF="794.9585,9.375" LocationFloat="1.04166663, 76.0416" />
-        <Item8 Ref="165" ControlType="XRLabel" Name="label3" Text="Demonstrativo de Valores a Resgatar" TextAlignment="MiddleLeft" SizeF="338.759033,27.4999619" LocationFloat="0, 48.54164" Font="Verdana, 10pt, style=Bold" Padding="2,2,0,0,100" Borders="None">
-          <StylePriority Ref="166" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-        </Item8>
-        <Item9 Ref="167" ControlType="XRLabel" Name="label2" Text="Saldo atualizado para" TextAlignment="MiddleRight" SizeF="172.092377,27.4999619" LocationFloat="0, 0" Font="Verdana, 10pt" Padding="2,2,0,0,100" Borders="None">
-          <StylePriority Ref="168" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-        </Item9>
-        <Item10 Ref="169" ControlType="XRLabel" Name="label1" TextFormatString="{0:dd/MM/yyyy}" Text="00/00/0000" TextAlignment="MiddleLeft" SizeF="227.907623,27.4999619" LocationFloat="172.092377, 0" Font="Verdana, 10pt" Padding="2,2,0,0,100" Borders="None">
+        <Item7 Ref="141" ControlType="XRLabel" Name="label2" Text="Saldo atualizado para" TextAlignment="MiddleRight" SizeF="172.092377,27.4999619" LocationFloat="0, 0" Font="Verdana, 10pt" Padding="2,2,0,0,100" Borders="None">
+          <StylePriority Ref="142" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+        </Item7>
+        <Item8 Ref="143" ControlType="XRLabel" Name="label1" TextFormatString="{0:dd/MM/yyyy}" Text="00/00/0000" TextAlignment="MiddleLeft" SizeF="216.44928,27.4999619" LocationFloat="172.092377, 0" Font="Verdana, 10pt" Padding="2,2,0,0,100" Borders="None">
           <ExpressionBindings>
-            <Item1 Ref="170" Expression="[DataConversao]" PropertyName="Text" EventName="BeforePrint" />
+            <Item1 Ref="144" Expression="[DataConversao]" PropertyName="Text" EventName="BeforePrint" />
           </ExpressionBindings>
-          <StylePriority Ref="171" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-        </Item10>
-        <Item11 Ref="172" ControlType="XRTable" Name="table2" SizeF="394.134155,27.4999847" LocationFloat="400.824341, 0" Font="Verdana, 10pt" BackColor="255,224,224,224" Borders="All">
+          <StylePriority Ref="145" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+        </Item8>
+        <Item9 Ref="146" ControlType="XRTable" Name="table2" SizeF="394.9585,43.12496" LocationFloat="400, 0" Font="Verdana, 10pt" BackColor="255,224,224,224" Borders="All">
           <Rows>
-            <Item1 Ref="173" ControlType="XRTableRow" Name="tableRow2" Weight="1">
+            <Item1 Ref="147" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
-                <Item1 Ref="174" ControlType="XRTableCell" Name="tableCell7" Weight="0.47852925739866814" TextFormatString="{0:N2}" Multiline="true" Text="Total" TextAlignment="MiddleRight" Font="Verdana, 10pt, style=Bold">
+                <Item1 Ref="148" ControlType="XRTableCell" Name="tableCell7" Weight="0.480872341300514" TextFormatString="{0:N2}" Multiline="true" Text="Total" TextAlignment="MiddleRight" Font="Verdana, 10pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="175" Expression="[SaldoAtualizado]" PropertyName="Text" EventName="BeforePrint" />
+                    <Item1 Ref="149" Expression="[SaldoAtualizado]" PropertyName="Text" EventName="BeforePrint" />
                   </ExpressionBindings>
-                  <StylePriority Ref="176" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="150" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="177" ControlType="XRTableCell" Name="tableCell8" Weight="0.64170537526887839" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" TextAlignment="MiddleRight" Font="Verdana, 10pt, style=Bold">
+                <Item2 Ref="151" ControlType="XRTableCell" Name="tableCell8" Weight="0.64170537526887839" TextFormatString="Data de Emissão: {0:dd/MM/yyyy}" Multiline="true" TextAlignment="BottomRight" Font="Verdana, 10pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="178" Expression="[DataEmissao]" PropertyName="Text" EventName="BeforePrint" />
+                    <Item1 Ref="152" Expression="[DataEmissao]" PropertyName="Text" EventName="BeforePrint" />
                   </ExpressionBindings>
-                  <StylePriority Ref="179" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="153" UseFont="false" UseTextAlignment="false" />
                 </Item2>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="180" UseFont="false" UseBackColor="false" UseBorders="false" />
-        </Item11>
+          <StylePriority Ref="154" UseFont="false" UseBackColor="false" UseBorders="false" />
+        </Item9>
       </Controls>
     </Item5>
   </Bands>
