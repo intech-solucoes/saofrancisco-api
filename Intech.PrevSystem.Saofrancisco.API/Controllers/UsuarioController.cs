@@ -185,6 +185,25 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera a senha do participante para o primeiro acesso.
+        /// </summary>
+        /// <param name="data">{ SenhaNova: "123" }</param>
+        /// <returns>Retorna a mensagem de alteração efetuada com sucesso.</returns>
+        [HttpPost("alterarSenhaPrimeiroAcesso")]
+        [Authorize("Bearer")]
+        public IActionResult AlterarSenhaPrimeiroAcesso([FromBody] LoginEntidade data)
+        {
+            try
+            {
+                return Json(new UsuarioProxy().AlterarSenhaPrimeiroAcesso(Cpf, data.SenhaNova));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         //[HttpGet("menu")]
         //[Authorize("Bearer")]
         //public IActionResult Menu()
