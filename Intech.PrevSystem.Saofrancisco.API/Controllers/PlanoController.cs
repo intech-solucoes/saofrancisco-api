@@ -70,10 +70,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 
                 if (cdPlano == "0003")
                 {
-                    var ficha = new FichaFinanceiraProxy().BuscarExtrato(CdFundacao, cdPlano, Inscricao, dataInicio, dataFim);
+                    var ficha = new FichaFinanceiraProxy().BuscarExtratoTipoResgate(CdFundacao, cdPlano, Inscricao, dataInicio.ToString("yyyyMM"), dataFim.ToString("yyyyMM"), "01");
+                    var listaCompetenciasAPular = new string[] { "201710", "201711", "201712", "201713" };
+                    ficha = ficha.Where(x => !listaCompetenciasAPular.Contains(x.ANO_COMP + x.MES_COMP)).ToList();
                     ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "ficha").Value = ficha;
 
-                    var listaFichaSaldo = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricaoPeriodoTipoResgate(CdFundacao, cdPlano, Inscricao, dataInicio, dataFim, "01");
+                    var listaFichaSaldo = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricaoTipoResgate(CdFundacao, cdPlano, Inscricao, "01");
 
                     var qntCotaFD = 0M;
                     var qntCotaRP = 0M;
@@ -92,11 +94,17 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     }
 
                     var empresaPlano = new EmpresaPlanosProxy().BuscarPorFundacaoEmpresaPlano(CdFundacao, CdEmpresa, cdPlano);
-                    var indiceFD = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_FUNDO).First();
-                    var indiceRP = new IndiceValoresProxy().BuscarUltimoPorCodigo(empresaPlano.IND_RESERVA_POUP).First();
 
-                    var valorFD = qntCotaFD * indiceFD.VALOR_IND;
-                    var valorRP = qntCotaRP * indiceRP.VALOR_IND;
+                    var indicesFD = new IndiceValoresProxy().BuscarPorCodigo(empresaPlano.IND_FUNDO).ToList();
+                    var indicesRP = new IndiceValoresProxy().BuscarPorCodigo(empresaPlano.IND_RESERVA_POUP).ToList();
+
+                    var ultimoIndiceFD = indicesFD[0];
+                    var ultimoIndiceRP = indicesRP[0];
+                    var indiceAtrasadoFD = indicesFD[1];
+                    var indiceAtrasadoRP = indicesRP[1];
+
+                    var valorFD = qntCotaFD * indiceAtrasadoFD.VALOR_IND;
+                    var valorRP = qntCotaRP * indiceAtrasadoRP.VALOR_IND;
 
                     var calculoRP = true;
                     var saldoAtualizado = 0M;
@@ -119,24 +127,24 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     if (calculoRP)
                     {
                         qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldado(CdFundacao, cdPlano, Inscricao);
-                        valorBruto = qntCotasTotal * indiceRP.VALOR_IND;
-                        dataConversao = indiceRP.DT_IND;
+                        valorBruto = qntCotasTotal * indiceAtrasadoRP.VALOR_IND;
+                        dataConversao = ultimoIndiceRP.DT_IND;
                     }
                     else
                     {
-                        if (plano.DT_INSC_PLANO > new DateTime(1998, 12, 3))
+                        if (plano.DT_INSC_PLANO < new DateTime(1998, 12, 3))
                         {
                             qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDApos98(CdFundacao, cdPlano, Inscricao);
-                            valorBruto = qntCotasTotal * indiceFD.VALOR_IND;
+                            valorBruto = qntCotasTotal * indiceAtrasadoFD.VALOR_IND;
                         }
                         else
                         {
                             var percentual = new ValoresPercIdadeProxy().BuscarPercentual(CdFundacao, cdPlano, Inscricao);
                             qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDAntes98(CdFundacao, cdPlano, Inscricao, percentual);
-                            valorBruto = qntCotasTotal * indiceFD.VALOR_IND;
+                            valorBruto = qntCotasTotal * indiceAtrasadoFD.VALOR_IND;
                         }
 
-                        dataConversao = indiceFD.DT_IND;
+                        dataConversao = ultimoIndiceFD.DT_IND;
                     }
 
                     ((ObjectDataSource)relatorio.DataSource).Constructor.Parameters.First(x => x.Name == "valorBruto").Value = valorBruto;

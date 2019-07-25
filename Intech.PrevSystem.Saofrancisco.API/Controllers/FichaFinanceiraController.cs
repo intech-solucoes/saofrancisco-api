@@ -56,7 +56,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             try
             {
                 var contribsBasicas = new FichaFechamentoProxy().BuscarUltimaPorFundacaoEmpresaPlanoInscricao(CdFundacao, CdEmpresa, cdPlano, Inscricao);
-                var contribs = new FichaFinanceiraProxy().BuscarUltimaPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
+                var contribs = new FichaFinanceiraProxy().BuscarUltimoFechamentoPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
                 var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, "31");
 
                 var listaContribs = new List<Tuple<string, decimal>>
@@ -76,7 +76,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 return Json(new
                 {
-                    DataReferencia = $"01/{contribs.First().MES_REF}/{contribs.First().ANO_REF}",
+                    DataReferencia = $"01/{contribsBasicas.MES_REF}/{contribsBasicas.ANO_REF}",
                     contribs.First().SRC,
                     Percentual = contribsIndividuais.VL_PERC_PAR,
                     Contribuicoes = listaContribs,
