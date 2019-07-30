@@ -1,4 +1,6 @@
 ﻿#region Usings
+using Intech.Lib.Email;
+using Intech.Lib.Web;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
@@ -41,9 +43,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         //    }
         //}
 
-        [HttpGet("relatorio/{cdPlano}/{referencia}/{cdTipoFolha}")]
+        [HttpGet("relatorio/{cdPlano}/{referencia}/{cdTipoFolha}/{enviarPorEmail}")]
         [Authorize("Bearer")]
-        public IActionResult GetRelatorio(string cdPlano, string referencia, string cdTipoFolha)
+        public IActionResult GetRelatorio(string cdPlano, string referencia, string cdTipoFolha, bool enviarPorEmail)
         {
             try
             {
@@ -69,7 +71,18 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                     var filename = $"Contracheque - {dataReferencia.ToString("dd/MM/yyyy")}.pdf";
 
-                    return File(pdfStream, "application/pdf", filename);
+                    if (enviarPorEmail)
+                    {
+                        var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
+                        var emailConfig = AppSettings.Get().Email;
+                        EnvioEmail.EnviarMailKit(emailConfig, dados.EMAIL_AUX, $"Contracheque - {dataReferencia.ToString("dd/MM/yyyy")}", "", pdfStream, filename);
+
+                        return Json($"Contracheque enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
+                    }
+                    else
+                    {
+                        return File(pdfStream, "application/pdf", filename);
+                    }
                 }
             }
             catch (Exception ex)

@@ -1,4 +1,6 @@
 ﻿#region Usings
+using Intech.Lib.Email;
+using Intech.Lib.Web;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
@@ -12,9 +14,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     [Route(RotasApi.InfoRend)]
     public class InfoRendController : BaseInfoRendController
     {
-        [HttpGet("relatorio/{referencia}")]
+        [HttpGet("relatorio/{referencia}/{enviarPorEmail}")]
         [Authorize("Bearer")]
-        public IActionResult GetCertificado(decimal referencia)
+        public IActionResult GetCertificado(decimal referencia, bool enviarPorEmail)
         {
             try
             {
@@ -34,7 +36,18 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                     var filename = $"Informe de Rendimentos - {informe.ANO_CALENDARIO}.pdf";
 
-                    return File(pdfStream, "application/pdf", filename);
+                    if (enviarPorEmail)
+                    {
+                        var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
+                        var emailConfig = AppSettings.Get().Email;
+                        EnvioEmail.EnviarMailKit(emailConfig, dados.EMAIL_AUX, "Informe de Rendimentos", "", pdfStream, filename);
+
+                        return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
+                    }
+                    else
+                    {
+                        return File(pdfStream, "application/pdf", filename);
+                    }
                 }
             }
             catch (Exception ex)

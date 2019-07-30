@@ -1,6 +1,8 @@
 ﻿#region Usings
 using DevExpress.DataAccess.ObjectBinding;
 using DevExpress.XtraReports.UI;
+using Intech.Lib.Email;
+using Intech.Lib.Web;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
@@ -38,9 +40,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
-        [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}")]
+        [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}/{enviarPorEmail}")]
         [Authorize("Bearer")]
-        public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim)
+        public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim, bool enviarPorEmail)
         {
             try
             {
@@ -169,7 +171,18 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                     var filename = $"ExtratoContribuicoes_{Guid.NewGuid().ToString()}.pdf";
 
-                    return base.File(pdfStream, "application/pdf", filename);
+                    if (enviarPorEmail)
+                    {
+                        var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
+                        var emailConfig = AppSettings.Get().Email;
+                        EnvioEmail.EnviarMailKit(emailConfig, dados.EMAIL_AUX, "Extrato de Contribuições", "", pdfStream, filename);
+
+                        return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
+                    }
+                    else
+                    {
+                        return File(pdfStream, "application/pdf", filename);
+                    }
                 }
             }
             catch (Exception ex)
