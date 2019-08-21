@@ -43,16 +43,16 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         //    }
         //}
 
-        [HttpGet("relatorio/{cdPlano}/{referencia}/{cdTipoFolha}/{enviarPorEmail}")]
+        [HttpGet("relatorio/{cdPlano}/{referencia}/{cdTipoFolha}/{cdEspecie}/{enviarPorEmail}")]
         [Authorize("Bearer")]
-        public IActionResult GetRelatorio(string cdPlano, string referencia, string cdTipoFolha, bool enviarPorEmail)
+        public IActionResult GetRelatorio(string cdPlano, string referencia, string cdTipoFolha, string cdEspecie, bool enviarPorEmail)
         {
             try
             {
                 var dataReferencia = DateTime.ParseExact(referencia, "dd.MM.yyyy", new CultureInfo("pt-BR"));
 
                 var funcionario = new FuncionarioProxy().BuscarPorMatricula(Matricula);
-                var fichaFinanceiraAssistido = new FichaFinanceiraAssistidoProxy().BuscarRubricasPorFundacaoEmpresaMatriculaPlanoReferencia(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, Matricula, cdPlano, dataReferencia, cdTipoFolha);
+                var fichaFinanceiraAssistido = new FichaFinanceiraAssistidoProxy().BuscarRubricasPorFundacaoEmpresaMatriculaPlanoReferenciaEspecie(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, Matricula, cdPlano, dataReferencia, cdTipoFolha, cdEspecie);
                 var entidade = new EntidadeProxy().BuscarPorCodEntid(CodEntid);
                 var empresa = new EmpresaProxy().BuscarPorCodigo(funcionario.CD_EMPRESA);
                 var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, Matricula, cdPlano);

@@ -55,9 +55,16 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                var cdTipoContrib = "31";
+
+                var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano);
+
+                if (plano.CD_CATEGORIA == "3")
+                    cdTipoContrib = "60";
+
                 var contribsBasicas = new FichaFechamentoProxy().BuscarUltimaPorFundacaoEmpresaPlanoInscricao(CdFundacao, CdEmpresa, cdPlano, Inscricao);
                 var contribs = new FichaFinanceiraProxy().BuscarUltimoFechamentoPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
-                var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, "31");
+                var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, cdTipoContrib);
 
                 var listaContribs = new List<Tuple<string, decimal>>
                 {

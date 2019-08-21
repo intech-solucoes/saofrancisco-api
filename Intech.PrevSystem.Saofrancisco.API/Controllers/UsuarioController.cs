@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 #endregion
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
@@ -204,6 +205,108 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+        [HttpGet("matriculas")]
+        [Authorize("Bearer")]
+        public IActionResult BuscarMatriculas()
+        {
+            try
+            {
+                var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
+                var matriculas = new FuncionarioProxy().BuscarPorPesquisa(null, null, null, null, null, dados.NOME_ENTID);
+
+                var listaMatriculas = matriculas.GroupBy(x => x.NUM_MATRICULA).Select(x => x.Key).ToList();
+
+                return Json(listaMatriculas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("selecionarMatricula/{matricula}")]
+        [Authorize("Bearer")]
+        public IActionResult SelecionarMatricula(
+            [FromServices] SigningConfigurations signingConfigurations,
+            [FromServices] TokenConfigurations tokenConfigurations,
+            string matricula)
+        {
+            try
+            {
+                var funcionario = new FuncionarioProxy().BuscarPrimeiroPorCpf(Cpf);
+
+                if (funcionario.NUM_MATRICULA != matricula)
+                    funcionario = null;
+
+                var pensionista = false;
+                string codEntid;
+                string seqRecebedor;
+                string grupoFamilia;
+                string codEntidFuncionario = "";
+
+                if (funcionario != null)
+                {
+                    codEntid = funcionario.COD_ENTID.ToString();
+                    seqRecebedor = "0";
+                    grupoFamilia = "0";
+                }
+                else
+                {
+                    var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(Cpf).First();
+
+                    if (recebedorBeneficio == null)
+                        throw new Exception("CPF ou senha incorretos!");
+
+                    codEntid = recebedorBeneficio.COD_ENTID.ToString();
+                    funcionario = new FuncionarioProxy().BuscarPorMatricula(recebedorBeneficio.NUM_MATRICULA);
+                    codEntidFuncionario = funcionario.COD_ENTID.ToString();
+                    pensionista = true;
+                    seqRecebedor = recebedorBeneficio.SEQ_RECEBEDOR.ToString();
+                    grupoFamilia = recebedorBeneficio.NUM_SEQ_GR_FAMIL.ToString();
+                }
+
+                if (codEntid != null)
+                {
+                    var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(codEntid);
+                    var claims = new List<KeyValuePair<string, string>> {
+                        new KeyValuePair<string, string>("Cpf", Cpf),
+                        new KeyValuePair<string, string>("CodEntid", codEntid),
+                        new KeyValuePair<string, string>("CodEntidFuncionario", codEntidFuncionario),
+                        new KeyValuePair<string, string>("Matricula", funcionario.NUM_MATRICULA),
+                        new KeyValuePair<string, string>("Inscricao", funcionario.NUM_INSCRICAO),
+                        new KeyValuePair<string, string>("CdFundacao", funcionario.CD_FUNDACAO),
+                        new KeyValuePair<string, string>("CdEmpresa", funcionario.CD_EMPRESA),
+                        new KeyValuePair<string, string>("Pensionista", pensionista.ToString()),
+                        new KeyValuePair<string, string>("SeqRecebedor", seqRecebedor.ToString()),
+                        new KeyValuePair<string, string>("GrupoFamilia", grupoFamilia),
+                        new KeyValuePair<string, string>("Admin", Admin ? "S" : "N")
+                    };
+
+                    var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, Cpf, claims);
+
+                    return Json(new
+                    {
+                        token.AccessToken,
+                        token.Authenticated,
+                        token.Created,
+                        token.Expiration,
+                        token.Message,
+                        Pensionista,
+                        Admin = Admin ? "S" : "N"
+                    });
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         //[HttpGet("menu")]
         //[Authorize("Bearer")]
         //public IActionResult Menu()
@@ -254,7 +357,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 usuario = new UsuarioProxy().BuscarPorLogin(cpf, senha);
 
                 if (usuario == null)
-                    throw new Exception("Matrícula ou senha incorretos!");
+                    throw new Exception("CPF ou senha incorretos!");
             }
 
             var pensionista = false;
@@ -272,7 +375,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
             else
             {
-                var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(cpf);
+                var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(cpf).First();
 
                 if (recebedorBeneficio == null)
                     throw new Exception("CPF ou senha incorretos!");

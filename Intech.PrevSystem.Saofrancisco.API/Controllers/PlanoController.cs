@@ -52,8 +52,25 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 var relatorio = XtraReport.FromFile($"Relatorios/{nomeArquivoRepx}.repx");
 
-                var dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
-                var dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+                DateTime dataInicio;
+                DateTime dataFim;
+
+                try
+                {
+                    dataInicio = DateTime.ParseExact(dtInicio, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+                } catch
+                {
+                    throw new Exception("Data Início inválida!");
+                }
+
+                try
+                {
+                    dataFim = DateTime.ParseExact(dtFim, "dd.MM.yyyy", new CultureInfo("pt-BR"));
+                }
+                catch
+                {
+                    throw new Exception("Data Fim inválida!");
+                }
 
                 string AnoRefMesRefInicio = dataInicio.ToString("yyyyMM");
                 string AnoRefMesRefFim = dataFim.ToString("yyyyMM");

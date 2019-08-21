@@ -23,5 +23,18 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("porPlano/{cdPlano}")]
+        public IActionResult Get(string cdPlano)
+        {
+            try
+            {
+                return Json(new CalendarioPagamentoProxy().BuscarPorPlano(cdPlano));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
