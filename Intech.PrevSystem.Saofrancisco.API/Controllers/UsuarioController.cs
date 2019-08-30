@@ -252,7 +252,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 }
                 else
                 {
-                    var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(Cpf).First();
+                    var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(Cpf).FirstOrDefault();
 
                     if (recebedorBeneficio == null)
                         throw new Exception("CPF ou senha incorretos!");
