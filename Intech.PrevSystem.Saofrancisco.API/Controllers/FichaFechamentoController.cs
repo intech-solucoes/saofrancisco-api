@@ -1,4 +1,5 @@
-﻿using Intech.PrevSystem.API;
+﻿using Intech.Lib.Util.Date;
+using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
                 }
 
-                return Json(new
+                return Json(new DatasInicialFinal
                 {
                     DataInicial = dataInicial,
                     DataFinal = dataFinal

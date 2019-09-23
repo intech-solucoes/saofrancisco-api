@@ -40,6 +40,139 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        [Authorize("Bearer")]
+        public IActionResult ExtratoCodeprev()
+        {
+            try
+            {
+                var cdPlano = "0002";
+
+                var dataInicial = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano).DT_INSC_PLANO;
+                var dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
+
+                string anoRefMesRefInicio = dataInicial.ToString("yyyyMM");
+                string anoRefMesRefFim = dataFinal.ToString("yyyyMM");
+
+                var ficha = new FichaFechamentoProxy().BuscarRelatorioPorFundacaoEmpresaPlanoInscricaoReferencia(CdFundacao, CdEmpresa, cdPlano, Inscricao, anoRefMesRefInicio, anoRefMesRefFim);
+
+                var resultado = new
+                {
+                    Ultimofechamento = dataFinal.ToString("MM/yyyy"),
+                    QuantidadeCotas = ficha.Sum(x => x.QTE_COTA).ToString("N6"),
+                    ValorAcumulado = ficha.Last().VL_ACUMULADO,
+                    CotaConversao = ficha.Last().VL_COTA.ToString("N6")
+                };
+
+                return Json(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("[action]")]
+        [Authorize("Bearer")]
+        public IActionResult ExtratoSaldado()
+        {
+            try
+            {
+                var cdPlano = "0002";
+
+                var funcionario = new FuncionarioProxy().BuscarDadosPorCodEntid(CodEntid);
+                var fundacao = new FundacaoProxy().BuscarPorCodigo(CdFundacao);
+                var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano);
+
+                var dataInicial = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano).DT_INSC_PLANO;
+                var dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
+
+                string anoRefMesRefInicio = dataInicial.ToString("yyyyMM");
+                string anoRefMesRefFim = dataFinal.ToString("yyyyMM");
+
+                var ficha = new FichaFinanceiraProxy().BuscarExtratoTipoResgate(CdFundacao, cdPlano, Inscricao, anoRefMesRefInicio, anoRefMesRefFim, "01");
+                var listaCompetenciasAPular = new string[] { "201710", "201711", "201712", "201713" };
+                ficha = ficha.Where(x => !listaCompetenciasAPular.Contains(x.ANO_COMP + x.MES_COMP)).ToList();
+
+                var listaFichaSaldo = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricaoTipoResgate(CdFundacao, cdPlano, Inscricao, "01");
+
+                var qntCotaFD = 0M;
+                var qntCotaRP = 0M;
+                foreach (var fichaSaldo in listaFichaSaldo)
+                {
+                    if (fichaSaldo.CD_OPERACAO == "D")
+                    {
+                        qntCotaFD += fichaSaldo.QTD_COTA_FD_PARTICIPANTE.Value * -1;
+                        qntCotaRP += fichaSaldo.QTD_COTA_RP_PARTICIPANTE.Value * -1;
+                    }
+                    else
+                    {
+                        qntCotaFD += fichaSaldo.QTD_COTA_FD_PARTICIPANTE.Value;
+                        qntCotaRP += fichaSaldo.QTD_COTA_RP_PARTICIPANTE.Value;
+                    }
+                }
+
+                var empresaPlano = new EmpresaPlanosProxy().BuscarPorFundacaoEmpresaPlano(CdFundacao, CdEmpresa, cdPlano);
+
+                var indicesFD = new IndiceValoresProxy().BuscarPorCodigo(empresaPlano.IND_FUNDO).ToList();
+                var indicesRP = new IndiceValoresProxy().BuscarPorCodigo(empresaPlano.IND_RESERVA_POUP).ToList();
+
+                var ultimoIndiceFD = indicesFD[0];
+                var ultimoIndiceRP = indicesRP[0];
+                var indiceAtrasadoFD = indicesFD[1];
+                var indiceAtrasadoRP = indicesRP[1];
+
+                var valorFD = qntCotaFD * indiceAtrasadoFD.VALOR_IND;
+                var valorRP = qntCotaRP * indiceAtrasadoRP.VALOR_IND;
+
+                var calculoRP = true;
+                var saldoAtualizado = 0M;
+
+                if (valorRP > valorFD)
+                {
+                    saldoAtualizado = valorRP;
+                }
+                else
+                {
+                    saldoAtualizado = valorFD;
+                    calculoRP = false;
+                }
+
+                var qntCotasTotal = 0M;
+                var valorBruto = 0M;
+                DateTime dataConversao;
+
+                if (calculoRP)
+                {
+                    qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldado(CdFundacao, cdPlano, Inscricao);
+                    valorBruto = qntCotasTotal * indiceAtrasadoRP.VALOR_IND;
+                    dataConversao = ultimoIndiceRP.DT_IND;
+                }
+                else
+                {
+                    if (plano.DT_INSC_PLANO < new DateTime(1998, 12, 3))
+                    {
+                        qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDApos98(CdFundacao, cdPlano, Inscricao);
+                        valorBruto = qntCotasTotal * indiceAtrasadoFD.VALOR_IND;
+                    }
+                    else
+                    {
+                        var percentual = new ValoresPercIdadeProxy().BuscarPercentual(CdFundacao, cdPlano, Inscricao);
+                        qntCotasTotal = new FichaFinanceiraProxy().FSF_BuscarCotasSaldadoFDAntes98(CdFundacao, cdPlano, Inscricao, percentual);
+                        valorBruto = qntCotasTotal * indiceAtrasadoFD.VALOR_IND;
+                    }
+
+                    dataConversao = ultimoIndiceFD.DT_IND;
+                }
+
+                return Json(ficha);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("relatorioExtratoPorPlanoReferencia/{cdPlano}/{dtInicio}/{dtFim}/{enviarPorEmail}")]
         [Authorize("Bearer")]
         public IActionResult GetRelatorioExtratoPorPlanoReferencia(string cdPlano, string dtInicio, string dtFim, bool enviarPorEmail)

@@ -63,8 +63,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     cdTipoContrib = "60";
 
                 var contribsBasicas = new FichaFechamentoProxy().BuscarUltimaPorFundacaoEmpresaPlanoInscricao(CdFundacao, CdEmpresa, cdPlano, Inscricao);
-                var contribs = new FichaFinanceiraProxy().BuscarUltimoFechamentoPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao);
+                var contribs = new FichaFinanceiraProxy().BuscarUltimoFechamentoPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao).ToList();
+
                 var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, cdTipoContrib);
+
+                if (contribsBasicas == null || contribs.Count == 0 || contribsIndividuais == null)
+                    return BadRequest("Não foi possível buscar sua ultima contribuição.");
 
                 var listaContribs = new List<Tuple<string, decimal>>
                 {
