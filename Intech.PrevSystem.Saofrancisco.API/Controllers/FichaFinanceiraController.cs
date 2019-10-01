@@ -68,7 +68,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, cdTipoContrib);
 
                 if (contribsBasicas == null || contribs.Count == 0 || contribsIndividuais == null)
-                    return BadRequest("Não foi possível buscar sua ultima contribuição.");
+                    return Json("Não foi possível buscar sua ultima contribuição.");
 
                 var listaContribs = new List<Tuple<string, decimal>>
                 {

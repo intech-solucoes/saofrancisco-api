@@ -24,12 +24,12 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
             try
             {
                 var emailConfig = Config.GetSection("Email").Get<ConfigEmail>();
-                EnvioEmail.EnviarMailKit(emailConfig, emailConfig.EmailRelacionamento, $"São Francisco - {relacionamentoEntidade.Assunto}", $"Mensagem de <b>{relacionamentoEntidade.Email}</b>:<br/><br/>{relacionamentoEntidade.Mensagem}");
+                EnvioEmail.Enviar(emailConfig, emailConfig.EmailRelacionamento, $"São Francisco - {relacionamentoEntidade.Assunto}", $"Mensagem de <b>{relacionamentoEntidade.Email}</b>:<br/><br/>{relacionamentoEntidade.Mensagem}");
                 return Ok();
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest("Ocorreu um erro ao enviar socilitação.");
+                return BadRequest($"Ocorreu um erro ao enviar socilitação. {ex.Message}");
             }
         }
     }

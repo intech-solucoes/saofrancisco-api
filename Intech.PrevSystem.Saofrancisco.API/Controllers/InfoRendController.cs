@@ -40,7 +40,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                         var emailConfig = AppSettings.Get().Email;
-                        EnvioEmail.EnviarMailKit(emailConfig, dados.EMAIL_AUX, "Informe de Rendimentos", "", pdfStream, filename);
+                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Informe de Rendimentos", "", pdfStream, filename);
 
                         return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
                     }

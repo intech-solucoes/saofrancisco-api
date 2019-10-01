@@ -32,7 +32,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new PlanoVinculadoProxy().FSFBuscarSaldado(CdFundacao, "0003", Inscricao));
+                return Json(new PlanoVinculadoProxy().FSFBuscarSaldado(CdFundacao, "0003", Inscricao).First());
             }
             catch (Exception ex)
             {
@@ -78,14 +78,19 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                var cdPlano = "0002";
+                var cdPlano = "0003";
 
                 var funcionario = new FuncionarioProxy().BuscarDadosPorCodEntid(CodEntid);
                 var fundacao = new FundacaoProxy().BuscarPorCodigo(CdFundacao);
                 var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano);
+                
+                var listaFicha = new FichaFinanceiraProxy().BuscarPorFundacaoPlanoInscricao(CdFundacao, cdPlano, Inscricao).ToList();
 
-                var dataInicial = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano).DT_INSC_PLANO;
-                var dataFinal = new FichaFechamentoProxy().BuscarDataUltimaContrib(CdFundacao, CdEmpresa, cdPlano, Inscricao);
+                var ultimaFicha = listaFicha.Last();
+                var dataInicial = new DateTime(Convert.ToInt32(ultimaFicha.ANO_REF), Convert.ToInt32(ultimaFicha.MES_REF), 1);
+
+                var primeiraFicha = listaFicha.First();
+                var dataFinal = new DateTime(Convert.ToInt32(primeiraFicha.ANO_REF), Convert.ToInt32(primeiraFicha.MES_REF), 1);
 
                 string anoRefMesRefInicio = dataInicial.ToString("yyyyMM");
                 string anoRefMesRefFim = dataFinal.ToString("yyyyMM");
@@ -165,7 +170,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     dataConversao = ultimoIndiceFD.DT_IND;
                 }
 
-                return Json(ficha);
+                return Json(new
+                {
+                    Ficha = ficha,
+                    ValorBruto = valorBruto,
+                    DataConversao = dataConversao,
+                    SaldoAtualizado = saldoAtualizado
+                });
             }
             catch (Exception ex)
             {
@@ -325,7 +336,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                         var emailConfig = AppSettings.Get().Email;
-                        EnvioEmail.EnviarMailKit(emailConfig, dados.EMAIL_AUX, "Extrato de Contribuições", "", pdfStream, filename);
+                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Extrato de Contribuições", "", pdfStream, filename);
 
                         return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
                     }

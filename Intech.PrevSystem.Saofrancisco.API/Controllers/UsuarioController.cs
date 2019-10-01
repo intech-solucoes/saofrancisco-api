@@ -348,6 +348,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
         private IActionResult MontarToken(SigningConfigurations signingConfigurations, TokenConfigurations tokenConfigurations, string cpf, string senha, bool semSenha = false)
         {
+            cpf = cpf.LimparMascara();
+
             var funcionarioProxy = new FuncionarioProxy();
 
             var usuario = new UsuarioEntidade();
