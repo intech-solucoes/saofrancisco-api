@@ -1,6 +1,5 @@
 ﻿#region Usings
-using Intech.Lib.Util.Seguranca;
-using Intech.Lib.Web.JWT;
+using Intech.Lib.JWT;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 #endregion
 
