@@ -4,6 +4,7 @@ using Intech.Lib.Email;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration; 
 #endregion
@@ -21,6 +22,7 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize("Bearer")]
         public IActionResult Post([FromBody]RelacionamentoEntidade relacionamentoEntidade)
         {
             try
