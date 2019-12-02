@@ -35,7 +35,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     var rendaMensal = saldoBeneficio * i;
                     var tempoRecebimento = saldoBeneficio / rendaMensal / 13;
                     var anosCompletos = Math.Floor(tempoRecebimento);
-                    var meses = Math.Ceiling((tempoRecebimento - anosCompletos) * 12);
+                    var meses = Math.Floor((tempoRecebimento - anosCompletos) * 12);
 
                     var rendaMensalItem = new RendaMensalItem
                     {

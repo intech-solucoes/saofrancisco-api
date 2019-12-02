@@ -267,7 +267,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 {
                     var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(codEntid);
                     var claims = new List<KeyValuePair<string, string>> {
-                        new KeyValuePair<string, string>("Cpf", Cpf),
+                        new KeyValuePair<string, string>("Cpf", Cpf.LimparMascara()),
                         new KeyValuePair<string, string>("CodEntid", codEntid),
                         new KeyValuePair<string, string>("CodEntidFuncionario", codEntidFuncionario),
                         new KeyValuePair<string, string>("Matricula", funcionario.NUM_MATRICULA),
@@ -399,7 +399,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(codEntid);
 
                 var claims = new List<KeyValuePair<string, string>> {
-                    new KeyValuePair<string, string>("Cpf", dadosPessoais.CPF_CGC),
+                    new KeyValuePair<string, string>("Cpf", dadosPessoais.CPF_CGC.LimparMascara()),
                     new KeyValuePair<string, string>("CodEntid", codEntid),
                     new KeyValuePair<string, string>("CodEntidFuncionario", codEntidFuncionario),
                     new KeyValuePair<string, string>("Matricula", funcionario.NUM_MATRICULA),
