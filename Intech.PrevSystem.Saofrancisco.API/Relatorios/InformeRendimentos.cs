@@ -223,9 +223,15 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
         private string BuscarValor(string codigo)
         {
             var codGrupo = codigo.Substring(0, 1);
+            var grupo = Informe.Grupos.SingleOrDefault(x => x.COD_GRUPO == codGrupo);
 
-            if (Informe.Grupos.Any(x => x.COD_GRUPO == codGrupo))
-                return Informe.Grupos.Where(x => x.COD_GRUPO == codGrupo).Single().Itens.SingleOrDefault(x => x.COD_LINHA == codigo)?.VAL_LINHA?.ToString("N2");
+            if (grupo != null)
+            {
+                var item = grupo.Itens.SingleOrDefault(x => x.COD_LINHA == codigo);
+
+                if (item != null && item.VAL_LINHA.HasValue)
+                    return item.VAL_LINHA.Value.ToString("N2");
+            }
 
             return "0,00";
         }

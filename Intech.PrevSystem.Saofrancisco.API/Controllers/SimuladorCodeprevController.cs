@@ -1,6 +1,7 @@
 ﻿using Intech.Lib.Util.Date;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Proxy;
+using Intech.PrevSystem.Negocio.Saofrancisco.Simuladores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,7 +16,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     {
         [HttpPost("[action]")]
         [Authorize("Bearer")]
-        public IActionResult Simular(DadosSimulacao dados)
+        public IActionResult Simular(SimuladorBeneficioCodeprevDados dados)
         {
             try
             {
@@ -104,24 +105,5 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
             saldoBeneficio = saldoProjetado - saque;
         }
-    }
-
-    public class DadosSimulacao
-    {
-        public int IdadeAposentadoria { get; set; }
-        public decimal PercentualContrib { get; set; }
-        public decimal PercentualSaque { get; set; }
-        public decimal Aporte { get; set; }
-        public decimal SaldoAcumulado { get; set; }
-        public decimal SaldoAcumulado8 { get; set; }
-        public decimal SalarioContribuicao { get; set; }
-    }
-
-    public class RendaMensalItem
-    {
-        public decimal Percentual { get; set; }
-        public decimal Renda { get; set; }
-        public decimal Renda8 { get; set; }
-        public string StringTempoRecebimento {get;set;}
     }
 }

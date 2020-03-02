@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.1.1</Version>
+    <Version>0.1.8</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>
     </DocumentationFile>
+    <OutputPath></OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Relatorios\Contracheque.repx" />
@@ -22,17 +23,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.11" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="18.1.12" />
+    <PackageReference Include="Intech.Lib.Email" Version="1.1.1" />
+    <PackageReference Include="Intech.Lib.JWT" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Dapper\Intech.Lib.Dapper.csproj" />
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Email\Intech.Lib.Email.csproj" />
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.JWT\Intech.Lib.JWT.csproj" />
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Util\Intech.Lib.Util.csproj" />
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Web\Intech.Lib.Web.csproj" />
+    <ProjectReference Include="..\..\lib\Intech.Lib.Web\Intech.Lib.Web.csproj" />
     <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.csproj" />
     <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
     <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.csproj" />

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Intech.Lib\Intech.Lib.Email\Intech.Lib.Email.csproj" />
     <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
   </ItemGroup>
 

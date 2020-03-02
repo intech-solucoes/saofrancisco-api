@@ -5,6 +5,7 @@ using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
@@ -18,7 +19,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new LGPDConsentimentoProxy().BuscarPorCPF(Cpf));
+                return Json(new LGPDConsentimentoProxy().BuscarPorCPF(Cpf).FirstOrDefault());
             }
             catch (Exception ex)
             {

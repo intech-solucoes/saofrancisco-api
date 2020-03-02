@@ -231,10 +231,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                var funcionario = new FuncionarioProxy().BuscarPrimeiroPorCpf(Cpf);
-
-                if (funcionario.NUM_MATRICULA != matricula)
-                    funcionario = null;
+                var funcionarios = new FuncionarioProxy().BuscarPrimeiroPorCpf(Cpf.LimparMascara());
+                var funcionario = funcionarios.FirstOrDefault(x => x.NUM_MATRICULA == matricula);
 
                 var pensionista = false;
                 string codEntid;
@@ -265,6 +263,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 if (codEntid != null)
                 {
+                    var usuario = new UsuarioProxy().BuscarPorCpf(Cpf);
                     var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(codEntid);
                     var claims = new List<KeyValuePair<string, string>> {
                         new KeyValuePair<string, string>("Cpf", Cpf.LimparMascara()),
@@ -277,7 +276,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         new KeyValuePair<string, string>("Pensionista", pensionista.ToString()),
                         new KeyValuePair<string, string>("SeqRecebedor", seqRecebedor.ToString()),
                         new KeyValuePair<string, string>("GrupoFamilia", grupoFamilia),
-                        new KeyValuePair<string, string>("Admin", Admin ? "S" : "N")
+                        new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString())
                     };
 
                     var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, Cpf, claims);
@@ -289,8 +288,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         token.Created,
                         token.Expiration,
                         token.Message,
-                        Pensionista,
-                        Admin = Admin ? "S" : "N"
+                        Pensionista = pensionista,
+                        Admin = (usuario.IND_ADMINISTRADOR == "S").ToString()
                     });
                 }
                 else
@@ -365,7 +364,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             string seqRecebedor;
             string grupoFamilia;
             string codEntidFuncionario = "";
-            var funcionario = funcionarioProxy.BuscarPrimeiroPorCpf(cpf);
+            var funcionario = funcionarioProxy.BuscarPrimeiroPorCpf(cpf).FirstOrDefault();
 
             if (funcionario != null)
             {
@@ -375,7 +374,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
             else
             {
-                var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(cpf).First();
+                var recebedorBeneficio = new RecebedorBeneficioProxy().BuscarPensionistaPorCpf(cpf).FirstOrDefault();
 
                 if (recebedorBeneficio == null)
                     throw new Exception("CPF ou senha incorretos!");

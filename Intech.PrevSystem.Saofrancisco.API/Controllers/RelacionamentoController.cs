@@ -1,6 +1,8 @@
 ﻿#region Usings
 using System;
 using Intech.Lib.Email;
+using Intech.Lib.Web;
+using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
@@ -11,19 +13,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Intech.PrevSystem.Sabesprev.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class RelacionamentoController : BaseController
     {
-        private IConfiguration Config;
-
-        public RelacionamentoController(IConfiguration configuration)
-        {
-            Config = configuration;
-        }
-
         [HttpPost]
         [Authorize("Bearer")]
-        public IActionResult Post([FromBody]RelacionamentoEntidade relacionamentoEntidade)
+        [Retorno("any")]
+        public IActionResult Enviar([FromBody]RelacionamentoEntidade relacionamentoEntidade)
         {
             try
             {
@@ -34,7 +30,7 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
                     $"Matrícula: <b>{Matricula}</b><br/>" +
                     $"<br/>" +
                     $"{relacionamentoEntidade.Mensagem}";
-                var emailConfig = Config.GetSection("Email").Get<ConfigEmail>();
+                var emailConfig = AppSettings.Get().Email;
                 EnvioEmail.Enviar(emailConfig, emailConfig.EmailRelacionamento, $"São Francisco - {relacionamentoEntidade.Assunto}", mensagem);
                 return Ok();
             }

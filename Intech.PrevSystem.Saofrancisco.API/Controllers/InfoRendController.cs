@@ -2,6 +2,7 @@
 using Intech.Lib.Email;
 using Intech.Lib.Web;
 using Intech.PrevSystem.API;
+using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,11 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                var informe = new HeaderInfoRendProxy().BuscarPorCpfReferencia(Cpf, referencia);
+                HeaderInfoRendEntidade informe;
+                if(Pensionista)
+                    informe = new HeaderInfoRendProxy().BuscarPorEmpresaMatriculaReferencia(CdEmpresa, Matricula, referencia, SeqRecebedor);
+                else
+                    informe = new HeaderInfoRendProxy().BuscarPorEmpresaMatriculaReferencia(CdEmpresa, Matricula, referencia);
 
                 var relatorio = new Relatorios.InformeRendimentos();
                 relatorio.GerarRelatorio(informe);

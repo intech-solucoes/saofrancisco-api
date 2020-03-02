@@ -1,5 +1,7 @@
 ﻿#region Usings
+using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
+using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Mvc;
 using System; 
@@ -12,7 +14,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
     public class CalendarioPagamentoController : BaseController
     {
         [HttpGet]
-        public IActionResult Get()
+        [Retorno(nameof(CalendarioPagamentoEntidade), true)]
+        public IActionResult Listar()
         {
             try
             {
@@ -25,7 +28,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         }
 
         [HttpGet("porPlano/{cdPlano}")]
-        public IActionResult Get(string cdPlano)
+        [Retorno(nameof(CalendarioPagamentoEntidade), true)]
+        public IActionResult BuscarPorPlano(string cdPlano)
         {
             try
             {

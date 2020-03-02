@@ -17,7 +17,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new FuncionarioProxy().BuscarDadosPorCodEntid(CodEntid, CodEntidFuncionario));
+                return Json(new FuncionarioProxy().BuscarDadosPorCodEntidEmpresa(CodEntid, CodEntidFuncionario, CdEmpresa));
             }
             catch (Exception ex)
             {
