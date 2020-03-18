@@ -1,12 +1,9 @@
-﻿using Intech.Lib.Util.Date;
-using Intech.PrevSystem.API;
-using Intech.PrevSystem.Negocio.Proxy;
+﻿using Intech.PrevSystem.API;
 using Intech.PrevSystem.Negocio.Saofrancisco.Simuladores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
@@ -22,12 +19,10 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             {
                 decimal saldoProjetado, saque, saldoBeneficio,
                     saldoProjetado8 = 0M, saque8 = 0M, saldoBeneficio8 = 0M;
-                Calcular(dados, dados.PercentualContrib, out saldoProjetado, out saque, out saldoBeneficio);
+                SimuladorBeneficioCodeprev.Calcular(dados, CodEntid, dados.PercentualContrib, out saldoProjetado, out saque, out saldoBeneficio);
 
                 if (dados.PercentualContrib < 8)
-                {
-                    Calcular(dados, 8, out saldoProjetado8, out saque8, out saldoBeneficio8);
-                }
+                    SimuladorBeneficioCodeprev.Calcular(dados, CodEntid, 8, out saldoProjetado8, out saque8, out saldoBeneficio8);
 
                 var listaRendaMensal = new List<RendaMensalItem>();
 
@@ -69,41 +64,6 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private void Calcular(DadosSimulacao dados, decimal percentualContrib, out decimal saldoProjetado, out decimal saque, out decimal saldoBeneficio)
-        {
-            var percentualPatronal = Math.Min(percentualContrib, 8);
-            var contribMensal = dados.SalarioContribuicao / 100 * percentualContrib;
-            var contribPatronal = dados.SalarioContribuicao / 100 * percentualPatronal;
-            var contribBrutaTotal = contribMensal + contribPatronal;
-
-            var indiceTaxaAdm = new IndiceProxy().BuscarUltimoPorCodigo("TXADMCD");
-            var indiceTaxaRisco = new IndiceProxy().BuscarUltimoPorCodigo("TXRISCOCD");
-
-            var taxaAdm = contribBrutaTotal * indiceTaxaAdm.VALORES.First().VALOR_IND / 100;
-            var taxaRisco = contribBrutaTotal * indiceTaxaRisco.VALORES.First().VALOR_IND / 100;
-
-            var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
-            var dataAposentadoria = dadosPessoais.DT_NASCIMENTO.AddYears(dados.IdadeAposentadoria);
-
-            saldoProjetado = dados.SaldoAcumulado;
-            for (var data = DateTime.Today; data <= dataAposentadoria; data = data.AddMonths(1))
-            {
-                var valor = contribBrutaTotal - taxaAdm;
-                var idadeNaData = new Intervalo(data, dadosPessoais.DT_NASCIMENTO).Anos;
-
-                if (idadeNaData < 58)
-                    valor -= taxaRisco;
-
-                saldoProjetado += valor;
-            }
-
-            saque = 0M;
-            if (dados.PercentualSaque > 0)
-                saque = saldoProjetado * (dados.PercentualSaque / 100);
-
-            saldoBeneficio = saldoProjetado - saque;
         }
     }
 }

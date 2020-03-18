@@ -1472,7 +1472,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             // xrLabel2
             // 
             this.xrLabel2.Borders = DevExpress.XtraPrinting.BorderSide.None;
-            this.xrLabel2.Font = new System.Drawing.Font("Arial", 12F);
+            this.xrLabel2.Font = new System.Drawing.Font("Arial", 9.75F);
             this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(97.91666F, 23F);
             this.xrLabel2.Name = "xrLabel2";
             this.xrLabel2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
@@ -1480,7 +1480,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel2.StylePriority.UseBorders = false;
             this.xrLabel2.StylePriority.UseFont = false;
             this.xrLabel2.StylePriority.UseTextAlignment = false;
-            this.xrLabel2.Text = "Secretaria da Receita Federal do Brasil";
+            this.xrLabel2.Text = "Secretaria Especial da Receita Federal do Brasil";
             this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrPictureBox1
@@ -1506,7 +1506,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             this.xrLabel1.StylePriority.UseBorders = false;
             this.xrLabel1.StylePriority.UseFont = false;
             this.xrLabel1.StylePriority.UseTextAlignment = false;
-            this.xrLabel1.Text = "MINISTÉRIO DA FAZENDA";
+            this.xrLabel1.Text = "MINISTÉRIO DA ECONOMIA";
             this.xrLabel1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrTableCell2

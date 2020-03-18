@@ -210,9 +210,19 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             try
             {
                 var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
-                var matriculas = new FuncionarioProxy().BuscarPorPesquisa(null, null, null, null, null, dados.NOME_ENTID);
+                var matriculas = new FuncionarioProxy().BuscarPorCpf(dados.CPF_CGC.LimparMascara());
+                var planos = new PlanoVinculadoProxy()
+                    .BuscarPorCpf(dados.CPF_CGC.LimparMascara())
+                    .Where(x => x.CD_CATEGORIA != "2")
+                    .GroupBy(x => x.NUM_INSCRICAO)
+                    .Select(x => x.Key)
+                    .ToList();
 
-                var listaMatriculas = matriculas.GroupBy(x => x.NUM_MATRICULA).Select(x => x.Key).ToList();
+                var listaMatriculas = matriculas
+                    .Where(x => planos.Any(x2 => x2 == x.NUM_INSCRICAO))
+                    .GroupBy(x => x.NUM_MATRICULA)
+                    .Select(x => x.Key)
+                    .ToList();
 
                 return Json(listaMatriculas);
             }

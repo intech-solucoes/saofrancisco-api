@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj" />
+    <ProjectReference Include="..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.csproj" />
   </ItemGroup>
 
 </Project>
