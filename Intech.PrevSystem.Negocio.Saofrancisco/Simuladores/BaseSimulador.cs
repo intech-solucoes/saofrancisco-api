@@ -1,7 +1,4 @@
-using Intech.Lib.Util.Date;
-using Intech.PrevSystem.Negocio.Proxy;
-using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
 {

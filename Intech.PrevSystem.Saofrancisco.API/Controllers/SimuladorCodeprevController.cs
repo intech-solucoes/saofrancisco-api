@@ -17,12 +17,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                var simulador = new SimuladorBeneficioCodeprev();
                 decimal saldoProjetado, saque, saldoBeneficio,
                     saldoProjetado8 = 0M, saque8 = 0M, saldoBeneficio8 = 0M;
-                var memoriaCalculo = SimuladorBeneficioCodeprev.Calcular(dados, CodEntid, dados.PercentualContrib, out saldoProjetado, out saque, out saldoBeneficio);
+                var memoriaCalculo = simulador.Calcular(dados, CodEntid, dados.PercentualContrib, out saldoProjetado, out saque, out saldoBeneficio);
 
                 if (dados.PercentualContrib < 8)
-                    SimuladorBeneficioCodeprev.Calcular(dados, CodEntid, 8, out saldoProjetado8, out saque8, out saldoBeneficio8);
+                    simulador.Calcular(dados, CodEntid, 8, out saldoProjetado8, out saque8, out saldoBeneficio8);
 
                 var listaRendaMensal = new List<RendaMensalItem>();
 
