@@ -54,11 +54,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var funcionario = new FuncionarioProxy().BuscarPorMatricula(Matricula);
                 var fichaFinanceiraAssistido = new FichaFinanceiraAssistidoProxy().BuscarRubricasPorFundacaoEmpresaMatriculaPlanoReferenciaEspecie(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, Matricula, cdPlano, dataReferencia, cdTipoFolha, cdEspecie);
                 var entidade = new EntidadeProxy().BuscarPorCodEntid(CodEntid);
+                var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                 var empresa = new EmpresaProxy().BuscarPorCodigo(funcionario.CD_EMPRESA);
                 var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(funcionario.CD_FUNDACAO, funcionario.CD_EMPRESA, Matricula, cdPlano);
 
                 var relatorio = new Relatorios.ContraCheque();
-                relatorio.GerarRelatorio(fichaFinanceiraAssistido, entidade, funcionario, empresa, plano);
+                relatorio.GerarRelatorio(fichaFinanceiraAssistido, entidade, funcionario, empresa, plano, dadosPessoais);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
