@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Saofrancisco.API", "Intech.PrevSystem.Saofrancisco.API\Intech.PrevSystem.Saofrancisco.API.csproj", "{FABB530A-DCCC-4567-8DF5-221D9A44AB39}"
 EndProject
@@ -19,6 +19,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{11d947ce-05e2-41db-8687-640404e96ef0}*SharedItemsImports = 13
+		..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{fabb530a-dccc-4567-8df5-221d9a44ab39}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -19,7 +19,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new CalendarioPagamentoProxy().Listar());
+                return Ok(new CalendarioPagamentoProxy().Listar());
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new CalendarioPagamentoProxy().BuscarPorPlano(cdPlano));
+                return Ok(new CalendarioPagamentoProxy().BuscarPorPlano(cdPlano));
             }
             catch (Exception ex)
             {
