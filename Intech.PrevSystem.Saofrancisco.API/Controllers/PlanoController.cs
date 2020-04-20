@@ -3,7 +3,9 @@ using DevExpress.DataAccess.ObjectBinding;
 using DevExpress.XtraReports.UI;
 using Intech.Lib.Email;
 using Intech.Lib.Web;
+using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
+using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +18,7 @@ using System.Linq;
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 {
+    /// <service nome="Plano" />
     [Route(RotasApi.Plano)]
     public class PlanoController : BasePlanoController
     {
@@ -24,6 +27,40 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         public PlanoController(IHostingEnvironment hostingEnvironment)
         {
             HostingEnvironment = hostingEnvironment;
+        }
+
+        /// <rota caminho="[action]" tipo="GET" />
+        /// <retorno tipo="PlanoVinculadoEntidade" lista="true" />
+        [HttpGet("[action]")]
+        [Retorno(nameof(PlanoVinculadoEntidade), true)]
+        [Authorize("Bearer")]
+        public IActionResult Buscar()
+        {
+            try
+            {
+                return Ok(new PlanoVinculadoProxy().BuscarPorFundacaoInscricao(CdFundacao, Inscricao));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <rota caminho="[action]" tipo="GET" />
+        /// <retorno tipo="PlanoEntidade" lista="true" />
+        [HttpGet("[action]")]
+        [Retorno(nameof(PlanoEntidade), true)]
+        [Authorize("Bearer")]
+        public IActionResult BuscarTodos()
+        {
+            try
+            {
+                return Ok(new PlanoProxy().BuscarTodos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("saldado")]

@@ -1,5 +1,6 @@
 ﻿#region Usings
 using Intech.Lib.JWT;
+using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
 using Intech.PrevSystem.Negocio.Proxy;
@@ -49,6 +50,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         /// </summary>
         /// <returns>Retorna true caso o usuário seja administrador</returns>
         [HttpGet("admin")]
+        [Retorno(nameof(Boolean))]
         [Authorize("Bearer")]
         public IActionResult GetAdmin()
         {

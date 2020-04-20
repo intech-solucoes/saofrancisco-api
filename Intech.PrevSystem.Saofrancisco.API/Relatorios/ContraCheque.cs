@@ -14,19 +14,19 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             InitializeComponent();
         }
 
-        public void GerarRelatorio(Contracheque demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano)
+        public void GerarRelatorio(Contracheque demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano, DadosPessoaisEntidade dadosPessoais)
         {
             var dataReferencia = demonstrativo.Resumo.Referencia;
 
-            xrLabelDataReferencia.Text = $"{dataReferencia.MesPorExtenso()}/{dataReferencia.Year}";
+            xrLabelDataReferencia.Text = dataReferencia.ToString("MM/yyyy");
             xrLabelNome.Text = entidade.NOME_ENTID;
             xrLabelEndereco.Text = entidade.END_ENTID;
             xrLabelBairro.Text = entidade.BAIRRO_ENTID;
             xrLabelCidade.Text = entidade.CID_ENTID;
             xrLabelCEP.Text = entidade.CEP_ENTID;
             xrLabelCPF.Text = entidade.CPF_CGC;
-            xrLabelRG.Text = $"{entidade.IDENTIDADE} - {entidade.ORGAO_EXP}";
-            xrLabelDataNacimento.Text = entidade.DT_NASCIMENTO?.ToString("dd/MM/yyyy");
+            xrLabelRG.Text = $"{dadosPessoais.NU_IDENT} - {dadosPessoais.ORG_EMIS_IDENT}";
+            xrLabelDataNacimento.Text = dadosPessoais.DT_NASCIMENTO.ToString("dd/MM/yyyy");
             xrLabelDataInicioBeneficio.Text = plano.ProcessoBeneficio.DT_INICIO_PREV?.ToString("dd/MM/yyyy");
             xrLabelNomePatrocinadora.Text = empresa.NOME_ENTID;
             xrLabelPlano.Text = plano.DS_PLANO;
