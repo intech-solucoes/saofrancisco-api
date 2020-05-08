@@ -118,7 +118,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             try
             {
                 var dataFim = DateTime.Now;
-                var bloqueios = new WebBloqueioFuncProxy().BuscarPorCdFundacaoNumFuncionalidadeCdEmpresaCdPlanoNumMatricula(CdFundacao, NUM_FUNCIONALIDADE, CdEmpresa, Matricula, CD_PLANO, CD_PLANO2, CD_PLANO3, dataFim).FirstOrDefault();
+                var bloqueios = new WebBloqueioFuncProxy().BuscarPorCdFundacaoNumFuncionalidadeCdEmpresaCdPlanoNumMatriculaOrderByDtaFim(CdFundacao, NUM_FUNCIONALIDADE, CdEmpresa, Matricula, CD_PLANO, CD_PLANO2, CD_PLANO3, dataFim).FirstOrDefault();
                 var res = bloqueios != null ? bloqueios.TXT_MOTIVO_BLOQUEIO : "";
                 return Ok(res);
             }
