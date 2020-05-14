@@ -28,7 +28,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             try
             {
                 var file = Arquivo.File;
-                long oid = 0;
+                decimal oid = 0;
 
                 if (!Directory.Exists("Upload"))
                     Directory.CreateDirectory("Upload");
@@ -48,7 +48,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         f.NOM_ARQUIVO_LOCAL = fileName;
                         f.NOM_ARQUIVO_ORIGINAL = fileName;
                         f.NOM_DIRETORIO_LOCAL = "Upload";
-                    oid = new ArquivoUploadProxy().Inserir(f);
+                    new ArquivoUploadProxy().Insert(f.DTA_UPLOAD, f.IND_STATUS, f.NOM_ARQUIVO_LOCAL, f.NOM_ARQUIVO_ORIGINAL, f.NOM_DIRETORIO_LOCAL);
+                    var a = new ArquivoUploadProxy().BuscarPorNome(f.NOM_ARQUIVO_ORIGINAL).LastOrDefault();
+                    oid = a != null ? a.OID_ARQUIVO_UPLOAD : 0;
                 }
 
                     
@@ -69,23 +71,24 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 {
                     var dataAtual = DateTime.Now;
 
-                    var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(Dados.Participante.CPF_CGC, dataAtual).FirstOrDefault();
+                    var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(Dados.CPF_Original.LimparMascara(), dataAtual).FirstOrDefault();
                     recad.IND_SITUACAO_RECAD = "SOL";
                     recad.NOM_USUARIO_ACAO = Dados.Participante.NOME_ENTID;
 
-                    new WebRecadPublicoAlvoProxy().Atualizar(recad);
+                    new WebRecadPublicoAlvoProxy().AtualizarUsuarioAcao(recad.OID_RECAD_CAMPANHA, recad.IND_SITUACAO_RECAD, recad.NOM_USUARIO_ACAO);
+                    //new WebRecadPublicoAlvoProxy().Atualizar(recad);
 
-                    var refEspecieINSS = new EspecieINSSProxy().BuscarPorChave(Dados.Participante.CD_ESPECIE_INSS);
+                    var refEspecieINSS = new EspecieINSSProxy().BuscarPorCdEspecieINSS(Dados.Participante.CD_ESPECIE_INSS);
 
                     var especieINSS = refEspecieINSS != null ? refEspecieINSS.DS_ESPECIE_INSS : null;
 
-                    var pais = new PaisProxy().BuscarPorChave(Dados.Participante.CD_PAIS).DS_PAIS;
+                    var pais = new PaisProxy().BuscarPorCdPais(Dados.Participante.CD_PAIS).DS_PAIS;
 
-                    var ufEndereco = new UFProxy().BuscarPorChave(Dados.Participante.UF_ENTID).DS_UNID_FED;
+                    var ufEndereco = new UFProxy().BuscarPorCdUF(Dados.Participante.UF_ENTID).DS_UNID_FED;
 
-                    var ufNaturalidade = new UFProxy().BuscarPorChave(Dados.Participante.UF_NATURALIDADE).DS_UNID_FED;
+                    var ufNaturalidade = new UFProxy().BuscarPorCdUF(Dados.Participante.UF_NATURALIDADE).DS_UNID_FED;
 
-                    var estadoCivil = new EstadoCivilProxy().BuscarPorChave(Dados.Participante.CD_ESTADO_CIVIL).DS_ESTADO_CIVIL;
+                    var estadoCivil = new EstadoCivilProxy().BuscarPorCodigo(Dados.Participante.CD_ESTADO_CIVIL).DS_ESTADO_CIVIL;
 
                     var dadosAntigos = new WebRecadPublicoAlvoProxy().BuscarDadosPorCdFundacaoSeqRecebedor(recad.CD_FUNDACAO, recad.SEQ_RECEBEDOR).FirstOrDefault();
 
@@ -98,7 +101,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     dadosInsert.TXT_MOTIVO_RECUSA = null;
                     dadosInsert.NOM_PESSOA = Dados.Participante.NOME_ENTID != dadosAntigos.NOME_ENTID ? Dados.Participante.NOME_ENTID : null;
                     dadosInsert.DTA_NASCIMENTO = Dados.Participante.DT_NASCIMENTO != dadosAntigos.DT_NASCIMENTO ? DateTime.Parse(Dados.Participante.DT_NASCIMENTO) : (DateTime?)null;
-                    dadosInsert.COD_CPF = Dados.Participante.CPF_CGC != dadosAntigos.CPF_CGC ? Dados.Participante.CPF_CGC : null;
+                    dadosInsert.COD_CPF = Dados.Participante.CPF_CGC.LimparMascara() != dadosAntigos.CPF_CGC.LimparMascara() ? Dados.Participante.CPF_CGC.LimparMascara() : null;
                     dadosInsert.COD_RG = Dados.Participante.NU_IDENT != dadosAntigos.NU_IDENT ? Dados.Participante.NU_IDENT : null;
                     dadosInsert.DES_ORGAO_EXPEDIDOR = Dados.Participante.ORG_EMIS_IDENT != dadosAntigos.ORG_EMIS_IDENT ? Dados.Participante.ORG_EMIS_IDENT : null;
                     dadosInsert.DTA_EXPEDICAO_RG = Dados.Participante.DT_EMIS_IDENT != dadosAntigos.DT_EMIS_IDENT ? DateTime.Parse(Dados.Participante.DT_EMIS_IDENT) : (DateTime?)null;
@@ -113,9 +116,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     dadosInsert.COD_ESTADO_CIVIL = Dados.Participante.CD_ESTADO_CIVIL != dadosAntigos.CD_ESTADO_CIVIL ? Dados.Participante.CD_ESTADO_CIVIL : null;
                     dadosInsert.DES_ESTADO_CIVIL = estadoCivil;
                     dadosInsert.NOM_CONJUGE = Dados.Participante.NOME_CONJUGE != dadosAntigos.NOME_CONJUGE ? Dados.Participante.NOME_CONJUGE : null;
-                    dadosInsert.COD_CPF_CONJUGE = Dados.Participante.CPF_CONJUGE != dadosAntigos.CPF_CONJUGE ? Dados.Participante.CPF_CONJUGE : null;
+                    dadosInsert.COD_CPF_CONJUGE = Dados.Participante.CPF_CONJUGE.LimparMascara() != dadosAntigos.CPF_CONJUGE.LimparMascara() ? Dados.Participante.CPF_CONJUGE.LimparMascara() : null;
                     dadosInsert.DTA_NASC_CONJUGE = null;
-                    dadosInsert.COD_CEP = Dados.Participante.CEP_ENTID != dadosAntigos.CEP_ENTID ? Dados.Participante.CEP_ENTID : null;
+                    dadosInsert.COD_CEP = Dados.Participante.CEP_ENTID.LimparMascara() != dadosAntigos.CEP_ENTID.LimparMascara() ? Dados.Participante.CEP_ENTID.LimparMascara() : null;
                     dadosInsert.DES_END_LOGRADOURO = Dados.Participante.END_ENTID != dadosAntigos.END_ENTID ? Dados.Participante.END_ENTID : null;
                     dadosInsert.DES_END_NUMERO = Dados.Participante.NR_END_ENTID != dadosAntigos.NR_END_ENTID ? Dados.Participante.NR_END_ENTID : null;
                     dadosInsert.DES_END_COMPLEMENTO = Dados.Participante.COMP_END_ENTID != dadosAntigos.COMP_END_ENTID ? Dados.Participante.COMP_END_ENTID : null;
@@ -145,7 +148,64 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     dadosInsert.IND_PPE_FAMILIAR = null;
                     dadosInsert.IND_FATCA = null;
 
-                    var oid_recad_dados = new WebRecadDadosProxy().Inserir(dadosInsert);
+                    new WebRecadDadosProxy().Insert(
+                        dadosInsert.OID_RECAD_PUBLICO_ALVO,
+    dadosInsert.DTA_SOLICITACAO,
+    dadosInsert.DES_ORIGEM,
+    dadosInsert.COD_PROTOCOLO,
+    dadosInsert.DTA_RECUSA ?? DateTime.Now,
+    dadosInsert.TXT_MOTIVO_RECUSA,
+    dadosInsert.NOM_PESSOA,
+    dadosInsert.DTA_NASCIMENTO ?? DateTime.Now,
+    dadosInsert.COD_CPF,
+    dadosInsert.COD_RG,
+    dadosInsert.DES_ORGAO_EXPEDIDOR,
+    dadosInsert.DTA_EXPEDICAO_RG ?? DateTime.Now,
+    dadosInsert.DTA_ADMISSAO ?? DateTime.Now,
+    dadosInsert.DES_NATURALIDADE,
+    dadosInsert.COD_UF_NATURALIDADE,
+    dadosInsert.DES_UF_NATURALIDADE,
+    dadosInsert.COD_NACIONALIDADE,
+    dadosInsert.DES_NACIONALIDADE,
+    dadosInsert.NOM_MAE,
+    dadosInsert.NOM_PAI,
+    dadosInsert.COD_ESTADO_CIVIL,
+    dadosInsert.DES_ESTADO_CIVIL,
+    dadosInsert.NOM_CONJUGE,
+    dadosInsert.COD_CPF_CONJUGE,
+    dadosInsert.DTA_NASC_CONJUGE ?? DateTime.Now,
+    dadosInsert.COD_CEP,
+    dadosInsert.DES_END_LOGRADOURO,
+    dadosInsert.DES_END_NUMERO,
+    dadosInsert.DES_END_COMPLEMENTO,
+    dadosInsert.DES_END_BAIRRO,
+    dadosInsert.DES_END_CIDADE,
+    dadosInsert.COD_END_UF,
+    dadosInsert.DES_END_UF,
+    dadosInsert.COD_PAIS,
+    dadosInsert.DES_PAIS,
+    dadosInsert.COD_EMAIL,
+    dadosInsert.COD_TELEFONE_FIXO,
+    dadosInsert.COD_TELEFONE_CELULAR,
+    dadosInsert.COD_CARGO,
+    dadosInsert.DES_CARGO,
+    dadosInsert.COD_SEXO,
+    dadosInsert.DES_SEXO,
+    dadosInsert.COD_BANCO,
+    dadosInsert.DES_BANCO,
+    dadosInsert.COD_AGENCIA,
+    dadosInsert.COD_DV_AGENCIA,
+    dadosInsert.COD_CONTA_CORRENTE,
+    dadosInsert.COD_DV_CONTA_CORRENTE,
+    dadosInsert.COD_ESPECIE_INSS,
+    dadosInsert.DES_ESPECIE_INSS,
+    dadosInsert.COD_BENEF_INSS,
+    dadosInsert.IND_PPE,
+    dadosInsert.IND_PPE_FAMILIAR,
+    dadosInsert.IND_FATCA
+                    ); //Inserir(dadosInsert);
+                    var a = new WebRecadDadosProxy().BuscarPorProtocolo(dadosInsert.COD_PROTOCOLO);
+                    var oid_recad_dados = a != null ? a.OID_RECAD_DADOS : 0;
 
                     if (Dados.ListaDependentes.Count > 0)
                     {
@@ -157,37 +217,65 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                             depInsert.NUM_SEQ_DEP = dep.NUM_SEQ_DEP;
                             depInsert.NOM_DEPENDENTE = dep.NOME_DEP;
                             depInsert.COD_GRAU_PARENTESCO = dep.CD_GRAU_PARENTESCO;
-                            depInsert.DES_GRAU_PARENTESCO = new GrauParentescoProxy().BuscarPorChave(dep.CD_GRAU_PARENTESCO).DS_GRAU_PARENTESCO;
+                            depInsert.DES_GRAU_PARENTESCO = new GrauParentescoProxy().BuscarPorCodigo(dep.CD_GRAU_PARENTESCO).DS_GRAU_PARENTESCO;
                             depInsert.DTA_NASCIMENTO = dep.DT_NASC_DEP;
                             depInsert.COD_SEXO = dep.SEXO_DEP;
-                            depInsert.DES_SEXO = new SexoProxy().BuscarPorChave(dep.SEXO_DEP).DS_SEXO;
-                            depInsert.COD_CPF = dep.CPF;
+                            depInsert.DES_SEXO = new SexoProxy().BuscarPorCodigo(dep.SEXO_DEP).DS_SEXO;
+                            depInsert.COD_CPF = dep.CPF.LimparMascara();
                             depInsert.COD_PERC_RATEIO = dep.PERC_PECULIO;
                             depInsert.IND_OPERACAO = dep.IND_OPERACAO;
 
-                            new WebRecadBeneficiarioProxy().Inserir(depInsert);
+                            //new WebRecadBeneficiarioProxy().Inserir(depInsert);
+                            new WebRecadBeneficiarioProxy().Insert(
+                                depInsert.OID_RECAD_DADOS,
+                                depInsert.COD_PLANO,
+                                depInsert.NUM_SEQ_DEP,
+                                depInsert.NOM_DEPENDENTE,
+                                depInsert.COD_GRAU_PARENTESCO,
+                                depInsert.DES_GRAU_PARENTESCO,
+                                depInsert.DTA_NASCIMENTO ?? DateTime.Now,
+                                depInsert.COD_SEXO,
+                                depInsert.DES_SEXO,
+                                depInsert.COD_CPF,
+                                depInsert.COD_PERC_RATEIO ?? 0,
+                                depInsert.IND_OPERACAO
+                            );
                         });
                     }
 
                     if (Dados.ListaDependentesIR.Count > 0)
                     {
-                        Dados.ListaDependentes.ForEach((dep) =>
+                        Dados.ListaDependentesIR.ForEach((dep) =>
                         {
                             var depInsert = new WebRecadDepedenteIREntidade();
                             depInsert.OID_RECAD_DADOS = oid_recad_dados;
                             depInsert.NUM_SEQ_DEP = dep.NUM_SEQ_DEP;
                             depInsert.NOM_DEPENDENTE = dep.NOME_DEP;
                             depInsert.COD_GRAU_PARENTESCO = dep.CD_GRAU_PARENTESCO;
-                            depInsert.DES_GRAU_PARENTESCO = new GrauParentescoProxy().BuscarPorChave(dep.CD_GRAU_PARENTESCO).DS_GRAU_PARENTESCO;
+                            depInsert.DES_GRAU_PARENTESCO = new GrauParentescoProxy().BuscarPorCodigo(dep.CD_GRAU_PARENTESCO).DS_GRAU_PARENTESCO;
                             depInsert.DTA_NASCIMENTO = dep.DT_NASC_DEP;
                             depInsert.DTA_INICIO_IRRF = dataAtual;
                             depInsert.DTA_TERMINO_IRRF = dep.DT_TERM_IRRF;
                             depInsert.COD_SEXO = dep.SEXO_DEP;
-                            depInsert.DES_SEXO = new SexoProxy().BuscarPorChave(dep.SEXO_DEP).DS_SEXO;
-                            depInsert.COD_CPF = dep.CPF;
+                            depInsert.DES_SEXO = new SexoProxy().BuscarPorCodigo(dep.SEXO_DEP).DS_SEXO;
+                            depInsert.COD_CPF = dep.CPF.LimparMascara();
                             depInsert.IND_OPERACAO = dep.IND_OPERACAO;
 
-                            new WebRecadDepedenteIRProxy().Inserir(depInsert);
+                            //new WebRecadDepedenteIRProxy().Inserir(depInsert);
+                            new WebRecadDepedenteIRProxy().Insert(
+                                depInsert.OID_RECAD_DADOS,
+                                depInsert.NUM_SEQ_DEP,
+                                depInsert.NOM_DEPENDENTE,
+                                depInsert.COD_GRAU_PARENTESCO,
+                                depInsert.DES_GRAU_PARENTESCO,
+                                depInsert.DTA_NASCIMENTO ?? DateTime.Now,
+                                depInsert.DTA_INICIO_IRRF ?? DateTime.Now,
+                                depInsert.DTA_TERMINO_IRRF ?? DateTime.Now,
+                                depInsert.COD_SEXO,
+                                depInsert.DES_SEXO,
+                                depInsert.COD_CPF,
+                                depInsert.IND_OPERACAO
+                            );
                         });
                     }
 
@@ -197,12 +285,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         Dados.ListaArquivo.ForEach(arquivoId =>
                         {
-                            var arquivoDados = new ArquivoUploadProxy().BuscarPorChave(arquivoId);
+                            var arquivoDados = new ArquivoUploadProxy().BuscarPorCodigo(arquivoId);
                             var arquivoInsert = new WebRecadDocumentoEntidade();
-                                arquivoInsert.OID_RECAD_DADOS = oid_recad_dados;
-                                arquivoInsert.TXT_TITULO = arquivoDados.NOM_ARQUIVO_LOCAL;
-                                arquivoInsert.TXT_NOME_FISICO = arquivoDados.NOM_ARQUIVO_ORIGINAL;
-                            new WebRecadDocumentoProxy().Inserir(arquivoInsert);
+                            arquivoInsert.OID_RECAD_DADOS = oid_recad_dados;
+                            arquivoInsert.TXT_TITULO = arquivoDados.NOM_ARQUIVO_LOCAL;
+                            arquivoInsert.TXT_NOME_FISICO = arquivoDados.NOM_ARQUIVO_ORIGINAL;
+                            new WebRecadDocumentoProxy().Insert(arquivoInsert.OID_RECAD_DADOS, arquivoInsert.TXT_TITULO, arquivoInsert.TXT_NOME_FISICO);
+                            //new WebRecadDocumentoProxy().Inserir(arquivoInsert);
 
                             var caminhoArquivo = System.IO.Path.Combine(arquivoDados.NOM_DIRETORIO_LOCAL, arquivoDados.NOM_ARQUIVO_LOCAL);
                             var arquivo = new System.IO.FileInfo(caminhoArquivo);
@@ -218,7 +307,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         docNames = null;
                     }
 
-                    var campanha = new WebRecadCampanhaProxy().BuscarPorChave(recad.OID_RECAD_CAMPANHA);
+                    var campanha = new WebRecadCampanhaProxy().BuscarPorCodigo(recad.OID_RECAD_CAMPANHA);
                     var emailConfig = AppSettings.Get().Email;
                     var msgParticipante =
                         $"SABESPREV<br/><br/>" +
@@ -226,16 +315,20 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 $"O seu recadastramento recebeu o número de protocolo <b>{dadosInsert.COD_PROTOCOLO}</b> e está em análise pela Sabesprev!<br/><br/>" +
 $" Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é uma exigência legal que garante a manutenção de seu benefício!";
                     // email para o participante
-                    EnvioEmail.Enviar(emailConfig, Dados.Participante.EMAIL_AUX, $"Sabesprev - {campanha.NOM_CAMPANHA} - {Dados.Participante.NOME_ENTID}", msgParticipante);
+                    List<string> destinatario = new List<string>() {
+                        Dados.Participante.EMAIL_AUX
+                    };
+                    Enviar(emailConfig, destinatario, $"Sabesprev - {campanha.NOM_CAMPANHA} - {Dados.Participante.NOME_ENTID}", msgParticipante);
 
                     var msgFundacao =
-                        $"Documento: <b>Recadastramento de Assistidos e Pensionistas - Web</b><br/>" +
+$"Portal SABESPREV<br/><br/>" +
+$"Documento: <b>Recadastramento de Assistidos e Pensionistas - Web</b><br/>" +
 $"Data de envio: <b>{dataAtual}</b><br/>" +
 $"Nome do participante / solicitante: <b>{Dados.Participante.NOME_ENTID}<b><br/>" +
-$"Matrícula: <b>{Dados.Participante.NUM_MATRICULA}</b></br>" +
-$"Protocolo: <b>{dadosInsert.COD_PROTOCOLO}</b></br>" +
+$"Matrícula: <b>{Dados.Participante.NUM_MATRICULA}</b><br/>" +
+$"Protocolo: <b>{dadosInsert.COD_PROTOCOLO}</b><br/>" +
 $"CPF: <b>{Dados.Participante.CPF_CGC}</b>";
-                    List<string> destinatario = new List<string>() { 
+                    destinatario = new List<string>() {
                         "viniciusvives@gmail.com"
                     };
                     // email para a fundacao
@@ -243,7 +336,7 @@ $"CPF: <b>{Dados.Participante.CPF_CGC}</b>";
 
                     transaction.Complete();
 
-                    var msgFinal = $"O seu recadastramento recebeu o número de protocolo <b>{dadosInsert.COD_PROTOCOLO}</b> e está em análise pela Sabesprev!<br/>" +
+                    var msgFinal = $"O seu recadastramento recebeu o número de protocolo <b>{dadosInsert.COD_PROTOCOLO}</b> e está em análise pela Sabesprev!<br/><br/>" +
 $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é uma exigência legal que garante a manutenção de seu benefício!";
                     return Json(msgFinal);
                 }
@@ -261,7 +354,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
             try
             {
                 var dataAtual = DateTime.Now;
-                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf, dataAtual).FirstOrDefault();
+                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf.LimparMascara(), dataAtual).FirstOrDefault();
                 var msg = "";
                 if (recad == null)
                 {
@@ -300,7 +393,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
             try
             {
                 var dataAtual = DateTime.Now;
-                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf, dataAtual).FirstOrDefault();
+                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf.LimparMascara(), dataAtual).FirstOrDefault();
                 
                 var info = new WebRecadPublicoAlvoProxy().BuscarDadosPorCdFundacaoSeqRecebedor(recad.CD_FUNDACAO, recad.SEQ_RECEBEDOR).FirstOrDefault();
                 if (recad.CD_TIPO_RECEBEDOR == "G") {
@@ -345,7 +438,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
             try
             {
                 var dataAtual = DateTime.Now;
-                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf, dataAtual).FirstOrDefault();
+                var recad = new WebRecadPublicoAlvoProxy().BuscarPorCpfDataAtual(cpf.LimparMascara(), dataAtual).FirstOrDefault();
                 var ListaDependentesIR = recad.CD_TIPO_RECEBEDOR == "A" ?
                     new DependenteProxy().BuscarPorFundacaoInscricaoIRAssistido(recad.CD_FUNDACAO, recad.NUM_INSCRICAO, dataAtual) :
                     new DependenteProxy().BuscarPorFundacaoSeqRecebedorIRPensionista(recad.CD_FUNDACAO, recad.SEQ_RECEBEDOR, dataAtual);
@@ -381,7 +474,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
         {
             try
             {
-                if (!Validador.ValidarCPF(cpf))
+                if (!Validador.ValidarCPF(cpf.LimparMascara()))
                     return BadRequest("CPF Inválido.");
 
                 return Json("OK");
@@ -440,7 +533,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
         {
             try
             {
-                return Json(new GrauParentescoProxy().Listar());
+                return Json(new GrauParentescoProxy().BuscarOrderAlfabetica());
             }
             catch (Exception ex)
             {
@@ -468,7 +561,7 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
         {
             try
             {
-                return Json(new EspecieINSSProxy().Listar());
+                return Json(new EspecieINSSProxy().Buscar());
             }
             catch (Exception ex)
             {
@@ -524,5 +617,6 @@ $"Obrigado por realizar o seu recadastramento na Sabesprev! O recadastramento é
         public List<DependenteEntidade> ListaDependentes { get; set; }
         public List<DependenteEntidade> ListaDependentesIR { get; set; }
         public List<long> ListaArquivo { get; set; }
+        public string CPF_Original { get; set; }
     }
 }
