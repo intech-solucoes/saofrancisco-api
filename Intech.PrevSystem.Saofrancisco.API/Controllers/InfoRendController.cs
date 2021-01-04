@@ -7,6 +7,7 @@ using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 #endregion
 
@@ -45,7 +46,10 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                         var emailConfig = AppSettings.Get().Email;
-                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Informe de Rendimentos", "", pdfStream, filename);
+                        
+                        var Anexo = new KeyValuePair<string, Stream>(filename, pdfStream);
+
+                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Informe de Rendimentos", "", Anexo);
 
                         return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
                     }

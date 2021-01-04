@@ -76,7 +76,10 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                         var emailConfig = AppSettings.Get().Email;
-                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, $"Contracheque - {dataReferencia.ToString("dd/MM/yyyy")}", "", pdfStream, filename);
+
+                        var Anexo = new KeyValuePair<string, Stream>(filename, pdfStream);
+
+                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, $"Contracheque - {dataReferencia.ToString("dd/MM/yyyy")}", "", Anexo);
 
                         return Json($"Contracheque enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
                     }

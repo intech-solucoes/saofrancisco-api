@@ -1,5 +1,6 @@
 ﻿#region Usings
 using Intech.PrevSystem.Entidades;
+using Intech.PrevSystem.Entidades.Outros;
 using Intech.PrevSystem.Negocio.Proxy;
 using System;
 using System.Linq; 
@@ -14,7 +15,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Relatorios
             InitializeComponent();
         }
 
-        public void GerarRelatorio(Contracheque demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano, DadosPessoaisEntidade dadosPessoais)
+        public void GerarRelatorio(ContrachequeEntidade demonstrativo, EntidadeEntidade entidade, FuncionarioEntidade funcionario, EmpresaEntidade empresa, PlanoVinculadoEntidade plano, DadosPessoaisEntidade dadosPessoais)
         {
             var dataReferencia = demonstrativo.Resumo.Referencia;
 

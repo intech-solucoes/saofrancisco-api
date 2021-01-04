@@ -44,7 +44,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 //dados.NUM_MATRICULA = string.IsNullOrEmpty(dados.NUM_MATRICULA) ? null : dados.NUM_MATRICULA;
                 //dados.NOME = string.IsNullOrEmpty(dados.NOME) ? null : dados.NOME;
 
-                var pesquisa = new FuncionarioProxy().BuscarPorPesquisa(dados.CD_FUNDACAO, dados.CD_EMPRESA, dados.CD_PLANO, dados.CD_SIT_PLANO, dados.NUM_MATRICULA, dados.NOME);
+                var pesquisa = new FuncionarioProxy().BuscarPorPesquisa(dados.CD_FUNDACAO, dados.CD_EMPRESA, dados.CD_PLANO, dados.CD_SIT_PLANO, dados.NUM_MATRICULA, dados.NOME, "");
 
                 return Json(pesquisa);
             }

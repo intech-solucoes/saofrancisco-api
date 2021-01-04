@@ -4,6 +4,9 @@
         <name>Intech.PrevSystem.Saofrancisco.API</name>
     </assembly>
     <members>
+        <member name="T:Intech.PrevSystem.Saofrancisco.API.Controllers.DocumentoController">
+            <service nome="Documento" />
+        </member>
         <member name="T:Intech.PrevSystem.Saofrancisco.API.Controllers.EmpresaController">
             <service nome="Empresa" />
         </member>

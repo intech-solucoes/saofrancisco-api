@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -373,7 +374,10 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     {
                         var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                         var emailConfig = AppSettings.Get().Email;
-                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Extrato de Contribuições", "", pdfStream, filename);
+
+                        var Anexo = new KeyValuePair<string, Stream>(filename, pdfStream);
+
+                        EnvioEmail.Enviar(emailConfig, dados.EMAIL_AUX, "Extrato de Contribuições", "", Anexo);
 
                         return Json($"Extrato enviado com sucesso para o e-mail {dados.EMAIL_AUX}");
                     }
