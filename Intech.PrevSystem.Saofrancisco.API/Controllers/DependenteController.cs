@@ -22,7 +22,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             {
                 var funcionario = new FuncionarioProxy().BuscarPorCodEntid(CodEntid);
 
-                return Json(new DependenteProxy().BuscarPorFundacaoInscricao(funcionario.CD_FUNDACAO, funcionario.NUM_INSCRICAO));
+                return Json(new DependenteProxy().BuscarPorFundacaoInscricaoDtValidade(funcionario.CD_FUNDACAO, funcionario.NUM_INSCRICAO, DateTime.Now));
             }
             catch (Exception ex)
             {
