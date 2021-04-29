@@ -55,6 +55,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                var msgAdicional = "";
                 var cdTipoContrib = "31";
 
                 var plano = new PlanoVinculadoProxy().BuscarPorFundacaoEmpresaMatriculaPlano(CdFundacao, CdEmpresa, Matricula, cdPlano);
@@ -68,12 +69,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var contribsIndividuais = new ContribuicaoIndividualProxy().BuscarPorFundacaoPlanoInscricaoTipo(CdFundacao, cdPlano, Inscricao, cdTipoContrib);
 
                 if (contribsBasicas == null || contribs.Count == 0 || contribsIndividuais == null)
-                    return Json("Não foi possível buscar sua ultima contribuição.");
+                    msgAdicional = "Não foi possível buscar sua ultima contribuição.";
 
                 var listaContribs = new List<Tuple<string, decimal>>
                 {
-                    new Tuple<string, decimal>("Contribuição Participante", contribsBasicas.VL_GRUPO1),
-                    new Tuple<string, decimal>("Contribuição Patrocinadora", contribsBasicas.VL_GRUPO2)
+                    new Tuple<string, decimal>("Contribuição Participante", (contribsBasicas != null ? contribsBasicas.VL_GRUPO1 : 0)),
+                    new Tuple<string, decimal>("Contribuição Patrocinadora", (contribsBasicas != null ? contribsBasicas.VL_GRUPO2 : 0))
                 };
                 listaContribs.Add(new Tuple<string, decimal>("Total", listaContribs.Sum(x => x.Item2)));
 
@@ -87,12 +88,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 return Json(new
                 {
-                    DataReferencia = $"01/{contribsBasicas.MES_REF}/{contribsBasicas.ANO_REF}",
-                    contribs.First().SRC,
-                    Percentual = contribsIndividuais.VL_PERC_PAR,
+                    DataReferencia = (contribsBasicas != null ? $"01/{contribsBasicas.MES_REF}/{contribsBasicas.ANO_REF}" : ""),
+                    SRC = (contribs.Count > 0 ? contribs.First().SRC : 0),
+                    Percentual = (contribsIndividuais != null ? contribsIndividuais.VL_PERC_PAR : 0),
                     Contribuicoes = listaContribs,
                     Descontos = listaDescontos,
-                    Liquido = listaContribs.Last().Item2 - listaDescontos.Last().CONTRIB_PARTICIPANTE
+                    Liquido = listaContribs.Last().Item2 - listaDescontos.Last().CONTRIB_PARTICIPANTE,
+                    msgAdicional = msgAdicional
                 });
             }
             catch (Exception ex)
