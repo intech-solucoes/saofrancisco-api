@@ -46,7 +46,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     TXT_IPV6 = "",
                     TXT_ORIGEM = DMN_SISTEMA_ORIGEM.Valor(origem)
                 };
-                new LGPDConsentimentoProxy().Inserir(lgpd);
+                new LGPDConsentimentoProxy().Insert(lgpd);
 
                 return Ok();
             }
