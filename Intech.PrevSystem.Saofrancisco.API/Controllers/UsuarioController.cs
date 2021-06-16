@@ -138,7 +138,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
-                return Json(new UsuarioProxy().CriarAcesso(data.Cpf, data.DataNascimento));
+                return Json(new UsuarioProxy().CriarAcesso(data.Cpf, data.DataNascimento, buscaNP: true));
             }
             catch (Exception ex)
             {
