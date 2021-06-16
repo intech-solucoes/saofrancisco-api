@@ -1,5 +1,6 @@
 ﻿#region Usings
 using System;
+using System.Linq;
 using Intech.Lib.Email;
 using Intech.Lib.Web;
 using Intech.Lib.Web.API;
@@ -23,10 +24,14 @@ namespace Intech.PrevSystem.Sabesprev.Api.Controllers
         {
             try
             {
-                var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
+                string nome;
+                if (!NaoParticipante)
+                    nome = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid).NOME_ENTID;
+                else
+                    nome = new FuncionarioNPProxy().BuscarPorMatricula(Matricula).FirstOrDefault().NOME_ENTID;
                 
                 var mensagem = $"E-mail: <b>{relacionamentoEntidade.Email}</b><br/>" +
-                    $"Nome Completo: <b>{dados.NOME_ENTID}</b>:br/>" +
+                    $"Nome Completo: <b>{nome}</b>:br/>" +
                     $"Matrícula: <b>{Matricula}</b><br/>" +
                     $"<br/>" +
                     $"{relacionamentoEntidade.Mensagem}";

@@ -8,7 +8,7 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
 {
     public class SimuladorBeneficioCodeprev : BaseSimulador
     {
-        public List<KeyValuePair<string, string>> Calcular(SimuladorBeneficioCodeprevDados dados, string codEntid, decimal percentualContrib, out decimal saldoProjetado, out decimal saque, out decimal saldoBeneficio)
+        public List<KeyValuePair<string, string>> Calcular(SimuladorBeneficioCodeprevDados dados, decimal percentualContrib, DateTime DataNascimento, string CdEmpresa, out decimal saldoProjetado, out decimal saque, out decimal saldoBeneficio)
         {
             MemoriaCalculo = new List<KeyValuePair<string, string>>();
 
@@ -44,10 +44,9 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
             var taxaRisco = contribBrutaTotal * indiceTaxaRisco.VALORES.First().VALOR_IND / 100;
             Add("Taxa Risco", $"{taxaRisco}");
 
-            var dadosPessoais = new DadosPessoaisProxy().BuscarPorCodEntid(codEntid);
-            var funcionario = new FuncionarioProxy().BuscarPorCodEntid(codEntid);
-            var dataAposentadoria = dadosPessoais.DT_NASCIMENTO.AddYears(dados.IdadeAposentadoria);
-            var data58Anos = dadosPessoais.DT_NASCIMENTO.AddYears(58);
+           
+            var dataAposentadoria = DataNascimento.AddYears(dados.IdadeAposentadoria);
+            var data58Anos = DataNascimento.AddYears(58);
 
             Add("Data de Aposentadoria", $"{dataAposentadoria.ToString("dd/MM/yyyy")}");
             Add("Idade na Aposentadoria", $"{dados.IdadeAposentadoria}");
@@ -59,10 +58,10 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
             for (var data = DateTime.Today; data <= dataAposentadoria; data = data.AddMonths(1))
             {
                 var decimoTerceiro =
-                    (funcionario.CD_EMPRESA == "0001" && data.Month == 11) ||
-                    (funcionario.CD_EMPRESA == "0002" && data.Month == 12);
+                    (CdEmpresa == "0001" && data.Month == 11) ||
+                    (CdEmpresa == "0002" && data.Month == 12);
 
-                var idadeNaData = new Intervalo(data, dadosPessoais.DT_NASCIMENTO, new CalculoAnosMesesDiasAlgoritmo2()).Anos;
+                var idadeNaData = new Intervalo(data, DataNascimento, new CalculoAnosMesesDiasAlgoritmo2()).Anos;
 
                 var valor = contribBrutaTotal - taxaAdm;
 

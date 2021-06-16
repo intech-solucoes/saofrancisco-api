@@ -1,4 +1,5 @@
 ﻿using Intech.PrevSystem.API;
+using Intech.PrevSystem.Negocio.Proxy;
 using Intech.PrevSystem.Negocio.Saofrancisco.Simuladores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,20 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                DateTime DataNascimento;
+
+                if (!NaoParticipante)
+                    DataNascimento = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid).DT_NASCIMENTO;
+                else
+                    DataNascimento = new FuncionarioNPProxy().BuscarDadosNaoParticipantePorMatriculaEmpresa(Matricula, CdEmpresa).Funcionario.DT_NASCIMENTO.Value;
+
                 var simulador = new SimuladorBeneficioCodeprev();
                 decimal saldoProjetado, saque, saldoBeneficio,
                     saldoProjetado8 = 0M, saque8 = 0M, saldoBeneficio8 = 0M;
-                var memoriaCalculo = simulador.Calcular(dados, CodEntid, dados.PercentualContrib, out saldoProjetado, out saque, out saldoBeneficio);
+                var memoriaCalculo = simulador.Calcular(dados, dados.PercentualContrib, DataNascimento, CdEmpresa, out saldoProjetado, out saque, out saldoBeneficio);
 
                 if (dados.PercentualContrib < 8)
-                    simulador.Calcular(dados, CodEntid, 8, out saldoProjetado8, out saque8, out saldoBeneficio8);
+                    simulador.Calcular(dados, 8, DataNascimento, CdEmpresa, out saldoProjetado8, out saque8, out saldoBeneficio8);
 
                 var listaRendaMensal = new List<RendaMensalItem>();
 

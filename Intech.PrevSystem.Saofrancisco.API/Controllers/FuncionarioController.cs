@@ -6,6 +6,7 @@ using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 #endregion
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
@@ -17,12 +18,14 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         /// <rota caminho="/" tipo="GET" />
         /// <retorno tipo="FuncionarioDados" />
         [HttpGet]
-        [Retorno(nameof(FuncionarioDados))]
         [Authorize("Bearer")]
         public IActionResult Buscar()
         {
             try
             {
+                if (NaoParticipante)
+                    return Json(new FuncionarioNPProxy().BuscarDadosNaoParticipantePorMatriculaEmpresa(Matricula, CdEmpresa));
+
                 return Json(new FuncionarioProxy().BuscarDadosPorCodEntidEmpresa(CodEntid, CodEntidFuncionario, CdEmpresa));
             }
             catch (Exception ex)

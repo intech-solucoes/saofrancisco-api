@@ -211,6 +211,20 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                #region NaoParticipante
+                if(NaoParticipante) 
+                {
+                    var funcionarioNP = new FuncionarioNPProxy().BuscarPorCpf(Cpf);
+                    var listaMatriculasNP = funcionarioNP
+                       .GroupBy(x => x.NUM_MATRICULA)
+                       .Select(x => x.Key)
+                       .ToList();
+
+                    return Json(listaMatriculasNP);
+                }
+                #endregion
+
+                #region Participante
                 var dados = new DadosPessoaisProxy().BuscarPorCodEntid(CodEntid);
                 var matriculas = new FuncionarioProxy().BuscarPorCpf(dados.CPF_CGC.LimparMascara());
                 var planos = new PlanoVinculadoProxy()
@@ -227,6 +241,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     .ToList();
 
                 return Json(listaMatriculas);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -243,6 +258,43 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
         {
             try
             {
+                #region Nao Participante
+                if (NaoParticipante)
+                {
+                    var funcionarioNP = new FuncionarioNPProxy().BuscarPorMatricula(matricula).FirstOrDefault();
+                    var usuario = new UsuarioProxy().BuscarPorCpf(funcionarioNP.CPF_CGC.LimparMascara());
+
+                    var claims = new List<KeyValuePair<string, string>> {
+                        new KeyValuePair<string, string>("Cpf", funcionarioNP.CPF_CGC.LimparMascara()),
+                        new KeyValuePair<string, string>("CodEntid", "0"),
+                        new KeyValuePair<string, string>("CodEntidFuncionario", "0"),
+                        new KeyValuePair<string, string>("Matricula", funcionarioNP.NUM_MATRICULA),
+                        new KeyValuePair<string, string>("Inscricao", ""),
+                        new KeyValuePair<string, string>("CdFundacao", funcionarioNP.CD_FUNDACAO),
+                        new KeyValuePair<string, string>("CdEmpresa", funcionarioNP.CD_EMPRESA),
+                        new KeyValuePair<string, string>("Pensionista", (false).ToString()),
+                        new KeyValuePair<string, string>("SeqRecebedor", "0"),
+                        new KeyValuePair<string, string>("GrupoFamilia", ""),
+                        new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString()),
+                        new KeyValuePair<string, string>("NaoParticipante", (usuario.IND_NAO_PARTICIPANTE == "S").ToString())
+                    };
+
+                    var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, usuario.NOM_LOGIN, claims);
+
+                    return Json(new
+                    {
+                        token.AccessToken,
+                        token.Authenticated,
+                        token.Created,
+                        token.Expiration,
+                        token.Message,
+                        Pensionista = false,
+                        Admin = usuario.IND_ADMINISTRADOR == "S"
+                    });
+                }
+                #endregion
+
+                #region Participante
                 var funcionarios = new FuncionarioProxy().BuscarPrimeiroPorCpf(Cpf.LimparMascara());
                 var funcionario = funcionarios.FirstOrDefault(x => x.NUM_MATRICULA == matricula);
 
@@ -288,7 +340,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         new KeyValuePair<string, string>("Pensionista", pensionista.ToString()),
                         new KeyValuePair<string, string>("SeqRecebedor", seqRecebedor.ToString()),
                         new KeyValuePair<string, string>("GrupoFamilia", grupoFamilia),
-                        new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString())
+                        new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString()),
+                        new KeyValuePair<string, string>("NaoParticipante", (usuario.IND_NAO_PARTICIPANTE == "S").ToString())
                     };
 
                     var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, Cpf, claims);
@@ -304,6 +357,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                         Admin = (usuario.IND_ADMINISTRADOR == "S").ToString()
                     });
                 }
+                #endregion
                 else
                 {
                     return Unauthorized();
@@ -316,42 +370,70 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
-        //[HttpGet("menu")]
-        //[Authorize("Bearer")]
-        //public IActionResult Menu()
-        //{
-        //    try
-        //    {
-        //        var dadosPlano = new PlanoVinculadoProxy().BuscarPorFundacaoMatricula(CdFundacao, Matricula);
+        [HttpGet("[action]")]
+        [Authorize("Bearer")]
+        [Retorno("string", lista: true)]
+        public IActionResult Menu()
+        {
+            try
+            {
+                var menus = new List<string>();
 
-        //        var menuAtivos = new List<string> {
-        //            "home",
-        //            "dados",
-        //            "plano",
-        //            "emprestimos",
-        //            "trocarSenha",
-        //            "relacionamento"
-        //        };
+                #region Nao Participante
+                if (NaoParticipante)
+                {
+                    menus.AddRange(new[]
+                    {
+                        "home",
+                        "adesao",
+                        "simulador",
+                        "relacionamento",
+                        "trocarSenha",
+                        "login"
+                    });
+                }
+                #endregion
 
-        //        var menuAssistidos = new List<string> {
-        //            "home",
-        //            "dados",
-        //            "beneficios",
-        //            "emprestimos",
-        //            "trocarSenha",
-        //            "relacionamento"
-        //        };
+                #region Participante
+                if (!NaoParticipante)
+                {
+                    menus.AddRange(new[]
+                        {
+                        "dados",
+                        "documentos",
+                        "mensagens",
+                        "planos"
+                    });
 
-        //        if (dadosPlano.IsAtivo())
-        //            return Json(menuAtivos);
-        //        else
-        //            return Json(menuAssistidos);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                    var dadosPlano = new PlanoVinculadoProxy().BuscarPorFundacaoMatricula(CdFundacao, Matricula);
+
+                    // Ativos e autopatrocinados
+                    if (dadosPlano.Any(x => x.IsAtivo() || x.IsAutopatrocinio()))
+                    {
+                        menus.AddRange(new[]
+                        {
+                            "simulador"
+                        });
+                    }
+                    // Assistido
+                    if (dadosPlano.Any(x => x.IsAssistido()))
+                    {
+                        menus.AddRange(new[]
+                        {
+                            "contracheque",
+                            "infoRend"
+                        });
+                    }
+                }
+                #endregion
+
+                return Json(menus.Distinct());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         #region Métodos Provados
 
@@ -369,8 +451,44 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
 
                 if (usuario == null)
                     throw new Exception("CPF ou senha incorretos!");
+
+                #region Nao Participante
+                if (usuario.IND_NAO_PARTICIPANTE == "S")
+                {
+                    var funcionarioNP = new FuncionarioNPProxy().BuscarPorCpf(cpf).FirstOrDefault();
+
+                    var claims = new List<KeyValuePair<string, string>> {
+                        new KeyValuePair<string, string>("Cpf", funcionarioNP.CPF_CGC.LimparMascara()),
+                        new KeyValuePair<string, string>("CodEntid", "0"),
+                        new KeyValuePair<string, string>("CodEntidFuncionario", "0"),
+                        new KeyValuePair<string, string>("Matricula", funcionarioNP.NUM_MATRICULA),
+                        new KeyValuePair<string, string>("Inscricao", ""),
+                        new KeyValuePair<string, string>("CdFundacao", funcionarioNP.CD_FUNDACAO),
+                        new KeyValuePair<string, string>("CdEmpresa", funcionarioNP.CD_EMPRESA),
+                        new KeyValuePair<string, string>("Pensionista", (false).ToString()),
+                        new KeyValuePair<string, string>("SeqRecebedor", "0"),
+                        new KeyValuePair<string, string>("GrupoFamilia", ""),
+                        new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString()),
+                        new KeyValuePair<string, string>("NaoParticipante", (usuario.IND_NAO_PARTICIPANTE == "S").ToString())
+                    };
+
+                    var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, usuario.NOM_LOGIN, claims);
+
+                    return Json(new
+                    {
+                        token.AccessToken,
+                        token.Authenticated,
+                        token.Created,
+                        token.Expiration,
+                        token.Message,
+                        Pensionista = false,
+                        Admin = usuario.IND_ADMINISTRADOR == "S"
+                    });
+                }
+                #endregion
             }
 
+            #region Participante
             var pensionista = false;
             string codEntid;
             string seqRecebedor;
@@ -420,7 +538,8 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     new KeyValuePair<string, string>("Pensionista", pensionista.ToString()),
                     new KeyValuePair<string, string>("SeqRecebedor", seqRecebedor),
                     new KeyValuePair<string, string>("GrupoFamilia", grupoFamilia),
-                    new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString())
+                    new KeyValuePair<string, string>("Admin", (usuario.IND_ADMINISTRADOR == "S").ToString()),
+                    new KeyValuePair<string, string>("NaoParticipante", (usuario.IND_NAO_PARTICIPANTE == "S").ToString())
                 };
 
                 var token = AuthenticationToken.Generate(signingConfigurations, tokenConfigurations, usuario.NOM_LOGIN, claims);
@@ -436,6 +555,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                     Admin = usuario.IND_ADMINISTRADOR == "S"
                 });
             }
+            #endregion
 
             return Unauthorized();
         }
