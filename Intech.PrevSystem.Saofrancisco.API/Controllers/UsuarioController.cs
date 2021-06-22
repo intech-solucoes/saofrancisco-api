@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 using Intech.Lib.JWT;
 using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
@@ -366,7 +366,7 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
