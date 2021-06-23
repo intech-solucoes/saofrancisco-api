@@ -48,7 +48,7 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
             var dataAposentadoria = DataNascimento.AddYears(dados.IdadeAposentadoria);
             var data58Anos = DataNascimento.AddYears(58);
 
-            Add("Data de Aposentadoria", $"{dataAposentadoria.ToString("dd/MM/yyyy")}");
+            Add("Data de Aposentadoria", $"{dataAposentadoria:dd/MM/yyyy}");
             Add("Idade na Aposentadoria", $"{dados.IdadeAposentadoria}");
             
             Add("Saldo Acumulado", $"{dados.SaldoAcumulado.ToString("C")}");
@@ -65,26 +65,17 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
 
                 var valor = contribBrutaTotal - taxaAdm;
 
-                string memoria = "";
-
-                if (decimoTerceiro)
-                    memoria += "(";
-
-                memoria = $"{contribBrutaTotal} - {taxaAdm}";
-
                 // Verifica se o mês da evolução atual é o mês de aniversário
                 var mesAniversario58Anos = data58Anos.Month == data.Month && data58Anos.Year == data.Year;
 
                 if (idadeNaData < 58 && !mesAniversario58Anos)
                 {
                     valor -= taxaRisco;
-                    memoria += $" - {taxaRisco}";
                 }
 
                 if (decimoTerceiro)
                 {
                     valor *= 2;
-                    memoria += " * 2)";
                 }
 
                 var saldoProjetadoAnterior = saldoProjetado.Arredonda(2);
@@ -100,56 +91,56 @@ namespace Intech.PrevSystem.Negocio.Saofrancisco.Simuladores
                 {
                     if (idadeNaData < 58 && !mesAniversario58Anos)
                     {
-                        Add($"Saldo em {data.ToString("MM/yyyy")} ({idadeNaData} anos)",
-                            $"({contribBrutaTotal.ToString("N2")} - {taxaAdm} - {taxaRisco})" +
-                            $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")}" +
-                                $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")} * ({taxaMensal} / 100))" +
-                                $"{(data == DateTime.Today ? $" + {dados.Aporte.ToString("N2")}" : "")}" +
-                            $" = {saldoProjetado.ToString("N2")}");
+                        Add($"Saldo em {data:MM/yyyy} ({idadeNaData} anos)",
+                            $"({contribBrutaTotal:N2} - {taxaAdm} - {taxaRisco})" +
+                            $" + ({saldoProjetadoAnterior.Arredonda(2):N2}" +
+                                $" + ({saldoProjetadoAnterior.Arredonda(2):N2} * ({taxaMensal} / 100))" +
+                                $"{(data == DateTime.Today ? $" + {dados.Aporte:N2}" : "")}" +
+                            $" = {saldoProjetado:N2}");
                     }
                     else
                     {
-                        Add($"Saldo em {data.ToString("MM/yyyy")} ({idadeNaData} anos {(mesAniversario58Anos ? "e irá completar 58 este mês" : "")})",
-                            $"({contribBrutaTotal.ToString("N2")} - {taxaAdm})" +
-                            $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")}" +
-                                $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")} * ({taxaMensal} / 100))" +
-                                $"{(data == DateTime.Today ? $" + {dados.Aporte.ToString("N2")}" : "")}" +
-                            $" = {saldoProjetado.ToString("N2")}");
+                        Add($"Saldo em {data:MM/yyyy} ({idadeNaData} anos {(mesAniversario58Anos ? "e irá completar 58 este mês" : "")})",
+                            $"({contribBrutaTotal:N2} - {taxaAdm})" +
+                            $" + ({saldoProjetadoAnterior.Arredonda(2):N2}" +
+                                $" + ({saldoProjetadoAnterior.Arredonda(2):N2} * ({taxaMensal} / 100))" +
+                                $"{(data == DateTime.Today ? $" + {dados.Aporte:N2}" : "")}" +
+                            $" = {saldoProjetado:N2}");
                     }
                 }
                 else
                 {
                     if (idadeNaData < 58 && !mesAniversario58Anos)
                     {
-                        Add($"Saldo em {data.ToString("MM/yyyy")} (13º)",
-                            $"({contribBrutaTotal.ToString("N2")} - {taxaAdm} - {taxaRisco}) * 2)" +
-                            $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")}" +
-                                $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")} * ({taxaMensal} / 100))" +
-                                $"{(data == DateTime.Today ? $" + {dados.Aporte.ToString("N2")}" : "")}" +
-                            $" = {saldoProjetado.ToString("N2")}");
+                        Add($"Saldo em {data:MM/yyyy} (13º)",
+                            $"({contribBrutaTotal:N2} - {taxaAdm} - {taxaRisco}) * 2)" +
+                            $" + ({saldoProjetadoAnterior.Arredonda(2):N2}" +
+                                $" + ({saldoProjetadoAnterior.Arredonda(2):N2} * ({taxaMensal} / 100))" +
+                                $"{(data == DateTime.Today ? $" + {dados.Aporte:N2}" : "")}" +
+                            $" = {saldoProjetado:N2}");
                     }
                     else
                     {
-                        Add($"Saldo em {data.ToString("MM/yyyy")} (13º)",
-                            $"({contribBrutaTotal.ToString("N2")} - {taxaAdm}) * 2)" +
-                            $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")}" +
-                                $" + ({saldoProjetadoAnterior.Arredonda(2).ToString("N2")} * ({taxaMensal} / 100))" +
-                                $"{(data == DateTime.Today ? $" + {dados.Aporte.ToString("N2")}" : "")}" +
-                            $" = {saldoProjetado.ToString("N2")}");
+                        Add($"Saldo em {data:MM/yyyy} (13º)",
+                            $"({contribBrutaTotal:N2} - {taxaAdm}) * 2)" +
+                            $" + ({saldoProjetadoAnterior.Arredonda(2):N2}" +
+                                $" + ({saldoProjetadoAnterior.Arredonda(2):N2} * ({taxaMensal} / 100))" +
+                                $"{(data == DateTime.Today ? $" + {dados.Aporte:N2}" : "")}" +
+                            $" = {saldoProjetado:N2}");
                     }
                 }
             }
-            Add("Saldo Projetado", $"{saldoProjetado.ToString("C")}");
+            Add("Saldo Projetado", $"{saldoProjetado:C}");
 
             saque = 0M;
             if (dados.PercentualSaque > 0)
                 saque = saldoProjetado * (dados.PercentualSaque / 100);
 
             Add("Percentual de Saque a Vista", $"{dados.PercentualSaque}");
-            Add("Valor Saque a Vista", $"{saldoProjetado} * {dados.PercentualSaque / 100} = {saque.ToString("N2")}");
+            Add("Valor Saque a Vista", $"{saldoProjetado} * {dados.PercentualSaque / 100} = {saque:N2}");
 
             saldoBeneficio = saldoProjetado - saque;
-            Add("Saldo do Benefício", $"{saldoProjetado} - {saque} = {saldoBeneficio.ToString("N2")}");
+            Add("Saldo do Benefício", $"{saldoProjetado} - {saque} = {saldoBeneficio:N2}");
 
             return MemoriaCalculo;
         }

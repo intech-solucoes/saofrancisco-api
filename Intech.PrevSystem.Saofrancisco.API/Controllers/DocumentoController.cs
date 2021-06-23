@@ -1,19 +1,18 @@
 ﻿#region Usings
-using Intech.Lib.Web.API;
 using Intech.Lib.Email;
+using Intech.Lib.Web;
+using Intech.Lib.Web.API;
 using Intech.PrevSystem.API;
 using Intech.PrevSystem.Entidades;
+using Intech.PrevSystem.Entidades.Outros;
 using Intech.PrevSystem.Negocio.Proxy;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.IO;
-using Intech.Lib.Web;
-using System.Collections.Generic;
-using Intech.PrevSystem.Entidades.Outros;
-using System.Net.Http.Headers;
 using MimeKit;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 #endregion
 
 namespace Intech.PrevSystem.Saofrancisco.API.Controllers
@@ -280,12 +279,12 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 var documento = new DocumentoProxy().BuscarPorChave(OID_DOCUMENTO);
                 var arquivoUpload = new ArquivoUploadProxy().BuscarPorChave(documento.OID_ARQUIVO_UPLOAD);
 
-                var caminhoArquivo = System.IO.Path.Combine(arquivoUpload.NOM_DIRETORIO_LOCAL, arquivoUpload.NOM_ARQUIVO_LOCAL);
+                var caminhoArquivo = Path.Combine(arquivoUpload.NOM_DIRETORIO_LOCAL, arquivoUpload.NOM_ARQUIVO_LOCAL);
 
                 if (!System.IO.File.Exists(caminhoArquivo))
                     throw new Exception("Arquivo não encontrado!");
 
-                var arquivo = new System.IO.FileInfo(caminhoArquivo);
+                var arquivo = new FileInfo(caminhoArquivo);
                 var file = System.IO.File.OpenRead(caminhoArquivo);
                 var mimeType = MimeTypes.GetMimeType(arquivo.Name);
 

@@ -6,20 +6,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Saofranci
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sitema", "Sitema", "{29C18A67-2651-4148-AC1F-4FBB051F49C3}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.API", "..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.shproj", "{11D947CE-05E2-41DB-8687-640404E96EF0}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Intech.PrevSystem.API", "..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.shproj", "{11D947CE-05E2-41DB-8687-640404E96EF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Entidades", "..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj", "{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Entidades", "..\..\prevsystem\Intech.PrevSystem.Entidades\Intech.PrevSystem.Entidades.csproj", "{03310247-D78B-4C19-A0C4-34FE0A0BC5CC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Negocio.Saofrancisco", "Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.csproj", "{AA72439B-E3E9-4C28-A581-80E03D6B8587}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Dados", "..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.csproj", "{C5370871-D517-49FC-A61C-051B858A67A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Dados", "..\..\prevsystem\Intech.PrevSystem.Dados\Intech.PrevSystem.Dados.csproj", "{C5370871-D517-49FC-A61C-051B858A67A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Negocio", "..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.csproj", "{E06A7855-907B-4391-AB5A-A372182F5B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intech.PrevSystem.Negocio", "..\..\prevsystem\Intech.PrevSystem.Negocio\Intech.PrevSystem.Negocio.csproj", "{E06A7855-907B-4391-AB5A-A372182F5B1C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{11d947ce-05e2-41db-8687-640404e96ef0}*SharedItemsImports = 13
-		..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{fabb530a-dccc-4567-8df5-221d9a44ab39}*SharedItemsImports = 5
+		..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{11d947ce-05e2-41db-8687-640404e96ef0}*SharedItemsImports = 13
+		..\..\prevsystem\Intech.PrevSystem.API\Intech.PrevSystem.API.projitems*{fabb530a-dccc-4567-8df5-221d9a44ab39}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
