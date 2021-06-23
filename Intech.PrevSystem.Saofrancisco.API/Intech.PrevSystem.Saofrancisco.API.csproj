@@ -40,6 +40,9 @@
     <ProjectReference Include="..\Intech.PrevSystem.Negocio.Saofrancisco\Intech.PrevSystem.Negocio.Saofrancisco.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Formularios\FormularioAdesao.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="imagens\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
