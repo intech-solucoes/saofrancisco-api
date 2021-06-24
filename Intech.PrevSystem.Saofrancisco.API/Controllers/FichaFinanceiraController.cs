@@ -49,9 +49,9 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
             }
         }
 
-        [HttpGet("ultimaExibicaoPorPlano/{cdPlano}")]
+        [HttpGet("[action]/{cdPlano}")]
         [Authorize("Bearer")]
-        public IActionResult GetUltimaExibicaoPorPlano(string cdPlano)
+        public IActionResult BuscarUltimaExibicaoPorPlano(string cdPlano)
         {
             try
             {
