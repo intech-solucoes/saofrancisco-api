@@ -398,10 +398,13 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                 if (!NaoParticipante)
                 {
                     menus.AddRange(new[]
-                        {
+                    {
+                        "trocarSenha",
+                        "home",
                         "dados",
                         "documentos",
                         "mensagens",
+                        "relacionamento",
                         "planos"
                     });
 
@@ -415,13 +418,14 @@ namespace Intech.PrevSystem.Saofrancisco.API.Controllers
                             "simulador"
                         });
                     }
+
                     // Assistido
                     if (dadosPlano.Any(x => x.IsAssistido()))
                     {
                         menus.AddRange(new[]
                         {
                             "contracheque",
-                            "infoRend"
+                            "informeRendimentos"
                         });
                     }
                 }
